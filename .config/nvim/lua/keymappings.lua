@@ -15,6 +15,10 @@ vim.cmd('nnoremap <C-k> <C-w>k')
 vim.cmd('nnoremap <C-h> <C-w>h')
 vim.cmd('nnoremap <C-l> <C-w>l')
 
+vim.cmd('nnoremap <A-l> :bn<CR>')
+vim.cmd('nnoremap <A-h> :bp<CR>')
+vim.cmd('command Bd bp|bd #')
+
 vim.cmd([[ tnoremap <Esc> <C-\><C-n> ]])
 vim.cmd([[ tnoremap <C-j> <C-\><C-n><C-w>j ]])
 vim.cmd([[ tnoremap <C-k> <C-\><C-n><C-w>k ]])

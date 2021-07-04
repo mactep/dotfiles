@@ -1,32 +1,22 @@
 {
-    "diagnostic.enableSign": false,
-    "diagnostic.virtualText": true,
-    "diagnostic.virtualTextCurrentLineOnly": false,
-    "python.jediEnabled": false,
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": true,
-    "python.linting.pylintArgs": ["--enable=W0614", "--extension-pkg-whitelist=cv2"],
+  "suggest.noselect": false,
+  "diagnostic.enableSign": false,
+  "diagnostic.virtualText": true,
+  "diagnostic.virtualTextCurrentLineOnly": false,
+  "python.jediEnabled": false,
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": ["--enable=W0614", "--extension-pkg-whitelist=cv2"],
 
-    "snippets.ultisnips.directories": ["vim-snippets/snippets"],
-    "snippets.userSnippetsDirectory": "~/.config/nvim/snippets/ultisnips",
+  "snippets.ultisnips.directories": ["vim-snippets/snippets"],
+  "snippets.userSnippetsDirectory": "~/.config/nvim/snippets/ultisnips",
 
-    "latex.build.onSave": true,
-    "latex.forwardSearch.executable": "zathura",
-    "latex.forwardSearch.args": ["--synctex-forward", "%l:1:%f", "%p"],
-
-    "languageserver": {
-        "ccls": {
-            "command": "ccls",
-            "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-            "rootPatterns": [".ccls-root", "compile_commands.json"],
-            "initializationOptions": {
-                "cache": {
-                    "directory": ".ccls-cache"
-                },
-                "client": {
-                    "snippetSupport": true
-                }
-            }
-        }
-    }
+  "latex.build.onSave": true,
+  "latex.forwardSearch.executable": "zathura",
+  "latex.forwardSearch.args": [
+    "--synctex-forward",
+    "%l:1:%f",
+    "%p"
+  ],
+  "clangd.path": "/home/tulio/.config/coc/extensions/coc-clangd-data/install/12.0.0/clangd_12.0.0/bin/clangd"
 }

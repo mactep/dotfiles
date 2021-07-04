@@ -1,0 +1,15 @@
+snippet bootstrap "Boostrap makefile for C" b
+full: compile check clear
+
+compile:
+	gcc -c *.c
+	gcc *.o
+
+check:
+	valgrind -s --leak-check=full ./a.out
+
+clear:
+	rm *.o
+	rm a.out
+
+endsnippet
