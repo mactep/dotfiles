@@ -1,2 +1,2 @@
-source ~/.config/nvim/ftplugin/javascript.vim
-let g:coc_global_extensions = ['coc-angular']
+let g:coc_global_extensions = ['coc-tsserver', 'coc-angular']
+setlocal tabstop=2 shiftwidth=2 softtabstop=2

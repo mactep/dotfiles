@@ -14,10 +14,12 @@ require 'paq' {
     'neoclide/coc.nvim';
     'gruvbox-community/gruvbox';
     'nvim-treesitter/nvim-treesitter';
-    'nvim-telescope/telescope.nvim';
-    'nvim-lua/plenary.nvim';
-    'nvim-lua/popup.nvim';
     'norcalli/nvim-colorizer.lua';
+    -- requires fzy installed via luarocks, waiting for https://github.com/camspiers/snap/issues/14
+    {
+        'camspiers/snap';
+        run=[[ luarocks install fzy --local ]]
+    };
 }
 
 if fresh_install > 0 then

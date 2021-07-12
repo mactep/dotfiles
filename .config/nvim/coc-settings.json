@@ -1,5 +1,4 @@
 {
-  "suggest.noselect": false,
   "diagnostic.enableSign": false,
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextCurrentLineOnly": false,
@@ -18,5 +17,8 @@
     "%l:1:%f",
     "%p"
   ],
-  "clangd.path": "/home/tulio/.config/coc/extensions/coc-clangd-data/install/12.0.0/clangd_12.0.0/bin/clangd"
+
+  "clangd.path": "/home/tulio/.config/coc/extensions/coc-clangd-data/install/12.0.0/clangd_12.0.0/bin/clangd",
+
+  "angular.experimental-ivy": true
 }
