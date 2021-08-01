@@ -12,9 +12,12 @@ require 'paq' {
     {'honza/vim-snippets', opt=true};
     'tpope/vim-fugitive';
     'neoclide/coc.nvim';
-    'gruvbox-community/gruvbox';
+    'rktjmp/lush.nvim';
+    'npxbr/gruvbox.nvim';
     'nvim-treesitter/nvim-treesitter';
     'norcalli/nvim-colorizer.lua';
+    'lukas-reineke/indent-blankline.nvim';
+    'rmagatti/auto-session';
     -- requires fzy installed via luarocks, waiting for https://github.com/camspiers/snap/issues/14
     {
         'camspiers/snap';
