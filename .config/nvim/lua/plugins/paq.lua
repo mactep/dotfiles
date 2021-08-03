@@ -11,7 +11,7 @@ require 'paq' {
 
     {'honza/vim-snippets', opt=true};
     'tpope/vim-fugitive';
-    'neoclide/coc.nvim';
+    {'neoclide/coc.nvim', branch='release'};
     'rktjmp/lush.nvim';
     'npxbr/gruvbox.nvim';
     'nvim-treesitter/nvim-treesitter';
