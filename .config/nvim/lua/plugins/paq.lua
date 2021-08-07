@@ -1,7 +1,6 @@
 local install_path = vim.fn.stdpath("data") .. "/site/pack/paqs/opt/paq-nvim"
-local fresh_install = vim.fn.empty(vim.fn.glob(install_path))
 
-if fresh_install > 0 then
+if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.cmd("!git clone https://github.com/savq/paq-nvim " .. install_path)
 end
 
@@ -25,6 +24,5 @@ require 'paq' {
     };
 }
 
-if fresh_install > 0 then
-  vim.cmd[[ PaqInstall ]]
-end
+vim.cmd[[ PaqClean ]]
+vim.cmd[[ PaqInstall ]]
