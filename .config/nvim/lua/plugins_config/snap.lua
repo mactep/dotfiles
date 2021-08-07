@@ -1,6 +1,9 @@
-package.path = package.path .. ";/home/tulio/.luarocks/share/lua/5.1/?.lua"
+local present, snap = pcall(require, 'snap')
+if not present then
+    return
+end
 
-local snap = require'snap'
+package.path = package.path .. ";/home/tulio/.luarocks/share/lua/5.1/?.lua"
 
 local file = snap.config.file:with {
     reverse = true,

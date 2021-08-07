@@ -1,5 +1,6 @@
-require('colorizer').setup({
-  '*';
-}, {
-  rgb_fn = true;
-})
+local present, colorizer = pcall(require, 'colorizer')
+if not present then
+    return
+end
+
+colorizer.setup({ '*' }, { rgb_fn = true })

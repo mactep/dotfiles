@@ -1,4 +1,7 @@
-local nvim_lsp = require('lspconfig')
+local present, lspconfig = pcall(require, 'lspconfig')
+if not present then
+    return
+end
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -59,7 +62,7 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 -- and map buffer local keybindings when the language server attaches
 local servers = { "pyright", "tsserver" }
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup { on_attach = on_attach, capabilities = capabilities }
+  lspconfig[lsp].setup { on_attach = on_attach, capabilities = capabilities }
 end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
