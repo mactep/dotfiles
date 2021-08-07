@@ -1,3 +1,5 @@
+map = vim.api.nvim_set_keymap
+
 -- TODO: replace 'vim.cmd'
 vim.g.mapleader = ','
 

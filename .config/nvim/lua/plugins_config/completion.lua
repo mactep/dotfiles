@@ -1,64 +1,37 @@
 local present, compe = pcall(require, 'compe')
-if not present then
-    return
+if present then
+    vim.o.completeopt = 'menuone,noselect'
+
+    compe.setup {
+        source = {
+            path = true;
+            buffer = true;
+            calc = false;
+            nvim_lsp = true;
+            nvim_lua = true;
+            vsnip = true;
+            ultisnips = true;
+            luasnip = {priority = 100000};
+        };
+    }
+
+    map("i", "<Tab>", "compe#confirm({ 'keys': '<Tab>', 'select': v:true })", { expr = true })
+    vim.cmd([[
+    inoremap <silent><expr> <C-f> compe#scroll({ 'delta': +4 })
+    inoremap <silent><expr> <C-d> compe#scroll({ 'delta': -4 })
+    ]])
 end
 
-vim.o.completeopt = 'menuone,noselect'
-
-compe.setup {
-    source = {
-        path = true;
-        buffer = true;
-        calc = true;
-        nvim_lsp = true;
-        nvim_lua = true;
-        vsnip = true;
-        ultisnips = true;
-        luasnip = true;
-    };
-}
+local present, autopairs = pcall(require, 'nvim-autopairs')
+if present then
+    autopairs.setup{}
+    require("nvim-autopairs.completion.compe").setup({
+        map_complete = true,
+        auto_select = false,
+    })
+end
 
 local present, luasnip = pcall(require, 'luasnip')
-if not present then
-    return
+if present then
+    require("luasnip/loaders/from_vscode").lazy_load()
 end
-
-local t = function(str)
-    return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local check_back_space = function()
-    local col = vim.fn.col('.') - 1
-    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        return true
-    else
-        return false
-    end
-end
-
-_G.tab_complete = function()
-    if vim.fn.pumvisible() == 1 then
-        return t '<C-n>'
-    elseif luasnip and luasnip.expand_or_jumpable() then
-        return t '<Plug>luasnip-expand-or-jump'
-    elseif check_back_space() then
-        return t '<Tab>'
-    else
-        return vim.fn['compe#complete']()
-    end
-end
-_G.s_tab_complete = function()
-    if vim.fn.pumvisible() == 1 then
-        return t '<C-p>'
-    elseif luasnip and luasnip.jumpable(-1) then
-        return t '<Plug>luasnip-jump-prev'
-    else
-        return t '<S-Tab>'
-    end
-end
-
-vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.tab_complete()', {expr = true})
-vim.api.nvim_set_keymap('s', '<Tab>', 'v:lua.tab_complete()', {expr = true})
-vim.api.nvim_set_keymap('i', '<S-Tab>', 'v:lua.s_tab_complete()', {expr = true})
-vim.api.nvim_set_keymap('s', '<S-Tab>', 'v:lua.s_tab_complete()', {expr = true})
-vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })

@@ -10,7 +10,7 @@ vim.g.nvim_tree_bindings = {
     { key = {'<BS>', 'h'}, cb = tree_cb('close_node') },
 }
 
-vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', {noremap = true})
-vim.api.nvim_set_keymap('n', '<leader>r', ':NvimTreeRefresh<CR>', {noremap = true})
+map('n', '<C-n>', ':NvimTreeToggle<CR>', {noremap = true})
+map('n', '<leader>r', ':NvimTreeRefresh<CR>', {noremap = true})
 
 vim.g.nvim_tree_auto_close = 1

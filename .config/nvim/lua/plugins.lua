@@ -17,6 +17,8 @@ require 'paq' {
     -- completion
     'hrsh7th/nvim-compe';
     'L3MON4D3/LuaSnip';
+    'windwp/nvim-autopairs';
+    'rafamadriz/friendly-snippets';
 
     -- colorscheme and highlighting
     'rktjmp/lush.nvim';
