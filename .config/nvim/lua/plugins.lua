@@ -19,6 +19,8 @@ require 'paq' {
     'L3MON4D3/LuaSnip';
     'windwp/nvim-autopairs';
     'rafamadriz/friendly-snippets';
+    'ray-x/lsp_signature.nvim';
+    'abecodes/tabout.nvim';
 
     -- colorscheme and highlighting
     'rktjmp/lush.nvim';

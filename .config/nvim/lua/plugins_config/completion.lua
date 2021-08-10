@@ -1,26 +1,42 @@
 local present, compe = pcall(require, 'compe')
-if present then
-    vim.o.completeopt = 'menuone,noselect'
-
-    compe.setup {
-        source = {
-            path = true;
-            buffer = true;
-            calc = false;
-            nvim_lsp = true;
-            nvim_lua = true;
-            vsnip = true;
-            ultisnips = true;
-            luasnip = {priority = 100000};
-        };
-    }
-
-    map("i", "<Tab>", "compe#confirm({ 'keys': '<Tab>', 'select': v:true })", { expr = true })
-    vim.cmd([[
-    inoremap <silent><expr> <C-f> compe#scroll({ 'delta': +4 })
-    inoremap <silent><expr> <C-d> compe#scroll({ 'delta': -4 })
-    ]])
+if not present then
+    return
 end
+
+vim.o.completeopt = 'menuone,noselect'
+
+compe.setup {
+    source = {
+        path = true;
+        buffer = true;
+        calc = false;
+        nvim_lsp = true;
+        nvim_lua = true;
+        vsnip = true;
+        ultisnips = true;
+        luasnip = true;
+    };
+}
+
+local Helper = require "compe.helper"
+Helper.convert_lsp_orig = Helper.convert_lsp
+Helper.convert_lsp = function(args)
+  local response = args.response or {}
+  local items = response.items or response
+  for _, item in ipairs(items) do
+    -- 2: method
+    -- 3: function
+    -- 4: constructor
+    if item.insertText == nil and (item.kind == 2 or item.kind == 3 or item.kind == 4) then
+      item.insertText = item.label .. "(${1})"
+      item.insertTextFormat = 2
+    end
+  end
+  return Helper.convert_lsp_orig(args)
+end
+
+map("i", "<C-f>", "compe#scroll({ 'delta': +4 })", { noremap = true; silent = true; expr = true })
+map("i", "<C-d>", "compe#scroll({ 'delta': -4 })", { noremap = true; silent = true; expr = true })
 
 local present, autopairs = pcall(require, 'nvim-autopairs')
 if present then
@@ -35,3 +51,48 @@ local present, luasnip = pcall(require, 'luasnip')
 if present then
     require("luasnip/loaders/from_vscode").lazy_load()
 end
+
+local present, tabout = pcall(require, 'tabout')
+if present then
+    tabout.setup{
+        tabkey = "",
+        backwards_tabkey = "",
+    }
+end
+
+local t = function(str)
+    return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+_G.tab_complete = function()
+    if vim.fn.pumvisible() == 1 then
+        return vim.fn['compe#confirm']({keys='<Tab>', select=true})
+    elseif luasnip and luasnip.jumpable(1) then
+        return t "<Plug>luasnip-jump-next"
+    else
+        return t "<Plug>(Tabout)"
+    end
+end
+_G.s_tab_complete = function()
+    if vim.fn.pumvisible() == 1 then
+        return t "<C-p>"
+    elseif luasnip and luasnip.jumpable(-1) then
+        return t "<Plug>luasnip-jump-prev"
+    else
+        -- If <S-Tab> is not working in your terminal, change it to <C-h>
+        return t "<Plug>(TaboutBack)"
+    end
+end
+
+vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+
+vim.cmd([[
+imap <silent><expr> <C-j> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<C-j>'
+inoremap <silent> <C-k> <cmd>lua require'luasnip'.jump(-1)<Cr>
+
+snoremap <silent> <C-j> <cmd>lua require('luasnip').jump(1)<Cr>
+snoremap <silent> <C-k> <cmd>lua require('luasnip').jump(-1)<Cr>
+]])
