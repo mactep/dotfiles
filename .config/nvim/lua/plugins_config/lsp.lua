@@ -60,4 +60,20 @@ for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup { on_attach = on_attach, capabilities = capabilities }
 end
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })
+
+-- TODO: check if exists a node_modules folder here and run npm i otherwise
+local languageServerPath = vim.fn.stdpath("config").."/languageserver"
+local cmd = {"ngserver", "--stdio", "--tsProbeLocations", languageServerPath , "--ngProbeLocations", languageServerPath}
+
+lspconfig.angularls.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+    cmd = cmd,
+    on_new_config = function(new_config, new_root_dir)
+        new_config.cmd = cmd
+    end,
+}
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics,
+    { virtual_text = false, signs = false })
