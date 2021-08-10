@@ -1,6 +1,5 @@
 -- general
 vim.opt.clipboard = 'unnamed'
--- opt.completeopt = 'longest,menuone,noinsert,noselect'
 vim.opt.hidden = true
 vim.opt.inccommand = 'nosplit'
 vim.opt.list = true
