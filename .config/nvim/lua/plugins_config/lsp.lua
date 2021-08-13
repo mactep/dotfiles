@@ -41,13 +41,6 @@ local on_attach = function(client, bufnr)
         autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})
         ]], false)
     end
-
-    -- signature
-    local present, lsp_signature = pcall(require, 'lsp_signature')
-    if present then
-        lsp_signature.on_attach();
-    end
-
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()

@@ -4,6 +4,9 @@ if not present then
 end
 
 treesitter_configs.setup({
-  ensure_installed = {'c', 'html', 'python', 'javascript', 'typescript', 'lua', 'go', 'comment'},
+  ensure_installed = {
+      'c', 'html', 'python', 'javascript', 'typescript', 'lua', 'go',
+      'comment', 'css'
+  },
   highlight = { enable = true },
 })

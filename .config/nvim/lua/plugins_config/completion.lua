@@ -40,6 +40,7 @@ if present then
     tabout.setup{
         tabkey = "",
         backwards_tabkey = "",
+        ignore_beginning = false,
     }
 end
 

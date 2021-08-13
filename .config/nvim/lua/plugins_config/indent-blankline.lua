@@ -5,5 +5,6 @@ end
 
 indent_blankline.setup {
     char = '|',
-    buftype_exclude = {'terminal'}
+    buftype_exclude = {'terminal'},
+    filetype_exclude = {'NvimTree'}
 }
