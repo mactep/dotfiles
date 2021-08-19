@@ -1,3 +1,7 @@
+-- this should be loaded before the plugin.
+-- waiting for a fix from de plugin side
+vim.g.nvim_tree_auto_close = 1
+
 local install_path = vim.fn.stdpath("data") .. "/site/pack/paqs/opt/paq-nvim"
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then

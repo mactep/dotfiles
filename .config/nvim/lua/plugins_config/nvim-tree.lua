@@ -12,5 +12,3 @@ vim.g.nvim_tree_bindings = {
 
 map('n', '<C-n>', ':NvimTreeToggle<CR>', {noremap = true})
 map('n', '<leader>r', ':NvimTreeRefresh<CR>', {noremap = true})
-
-vim.g.nvim_tree_auto_close = 1
