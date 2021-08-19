@@ -4,7 +4,8 @@ if not present then
 end
 
 indent_blankline.setup {
-    char = '|',
+    char = '│',
+    show_first_indent_level = false,
     buftype_exclude = {'terminal'},
-    filetype_exclude = {'NvimTree'}
+    filetype_exclude = {'NvimTree'},
 }
