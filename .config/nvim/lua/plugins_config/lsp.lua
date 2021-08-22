@@ -48,14 +48,14 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 -- Use a loop to conveniently both setup defined servers 
 -- and map buffer local keybindings when the language server attaches
-local servers = { "pyright", "tsserver" }
+local servers = { "pyright", "tsserver", "cssls" }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup { on_attach = on_attach, capabilities = capabilities }
 end
 
 
 -- TODO: check if exists a node_modules folder here and run npm i otherwise
-local languageServerPath = vim.fn.stdpath("config").."/languageserver"
+local languageServerPath = vim.fn.stdpath("config").."/lua/languageserver"
 local cmd = {"ngserver", "--stdio", "--tsProbeLocations", languageServerPath , "--ngProbeLocations", languageServerPath}
 
 lspconfig.angularls.setup{
