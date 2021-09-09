@@ -17,14 +17,17 @@ require 'paq' {
 
     -- lsp
     'neovim/nvim-lspconfig';
+    'kabouzeid/nvim-lspinstall';
 
     -- completion
-    'hrsh7th/nvim-compe';
+    'hrsh7th/nvim-cmp';
+    'hrsh7th/cmp-nvim-lsp';
+    'hrsh7th/cmp-path';
+    'hrsh7th/cmp-buffer';
+    'saadparwaiz1/cmp_luasnip';
     'L3MON4D3/LuaSnip';
     'windwp/nvim-autopairs';
     'rafamadriz/friendly-snippets';
-    'ray-x/lsp_signature.nvim';
-    'abecodes/tabout.nvim';
 
     -- colorscheme and highlighting
     'rktjmp/lush.nvim';
@@ -36,10 +39,8 @@ require 'paq' {
     'lukas-reineke/indent-blankline.nvim';
     'kyazdani42/nvim-web-devicons';
 
-    -- util
-    'rmagatti/auto-session';
-    -- requires fzy installed via luarocks, waiting for https://github.com/camspiers/snap/issues/14
-    { 'camspiers/snap'; run=[[ luarocks install fzy --local ]] };
+    -- utility
+    'camspiers/snap';
     'kyazdani42/nvim-tree.lua';
 }
 

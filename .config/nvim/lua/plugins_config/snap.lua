@@ -1,33 +1,39 @@
+local file = io.open(os.getenv('HOME')..'/.local/bin/fzf', 'r')
+
+if file == nil then
+    os.execute([[
+    curl -s https://api.github.com/repos/junegunn/fzf/releases/latest \
+    | grep "fzf-.*-linux_amd64.tar.gz" | cut -d : -f 2,3 | tr -d \" \
+    | wget -q -i - -O - | tar xvz -C ~/.local/bin/
+    ]])
+else
+    io.close(file)
+end
+
 local present, snap = pcall(require, 'snap')
 if not present then
     return
 end
 
-package.path = package.path .. ";/home/tulio/.luarocks/share/lua/5.1/?.lua"
-
 local file = snap.config.file:with {
     reverse = true,
+    prompt = "file",
     suffix = ">>",
-    prompt = "files",
-    consumer = "fzy"
+    consumer = "fzf",
+    preview_min_width = 0,
+    producer = "ripgrep.file"
 }
 
 local vimgrep = snap.config.vimgrep:with {
     reverse = true,
-    suffix = ">>",
     prompt = "grep",
-    consumer = "fzy",
-    limit = 50000
+    suffix = ">>",
+    consumer = "fzf",
+    limit = 50000,
+    preview_min_width = 0
 }
 
-
--- Git file producer with ripgrep fallback
-file {try = {"git.file", "ripgrep.file"}}
-
 snap.maps {
-  {"<Leader>ff", file {producer = "ripgrep.file"}},
-  {"<Leader>fg", file {producer = "git.file"}},
+  {"<Leader>ff", file {}},
   {"<Leader>fr", vimgrep {}},
-  {"<Leader>fb", snap.config.file {producer = "vim.buffer"}},
-  {"<Leader>fo", snap.config.file {producer = "vim.oldfile"}},
 }
