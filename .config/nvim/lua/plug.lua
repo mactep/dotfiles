@@ -8,6 +8,13 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.cmd("!git clone https://github.com/savq/paq-nvim " .. install_path)
 end
 
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plug.lua source <afile> | PaqSync
+  augroup end
+]])
+
 vim.cmd[[ packadd paq-nvim ]]
 require 'paq' {
     {'savq/paq-nvim', opt=true};
@@ -37,19 +44,17 @@ require 'paq' {
 
     -- ui
     'lukas-reineke/indent-blankline.nvim';
-    'kyazdani42/nvim-web-devicons';
 
     -- utility
-    'camspiers/snap';
-    'kyazdani42/nvim-tree.lua';
+    'nvim-lua/plenary.nvim';
+    'nvim-telescope/telescope.nvim';
+    {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' };
+    'tpope/vim-abolish';
 }
 
-vim.cmd[[ PaqClean ]]
-vim.cmd[[ PaqInstall ]]
-
-local plugin_dir = vim.fn.stdpath('config')..'/lua/plugins_config'
+local plugin_dir = vim.fn.stdpath('config')..'/lua/plugins'
 local p = io.popen('find "'..plugin_dir..'" -type f -printf "%f\n"')
 for file in p:lines() do
     file = string.gsub(file, ".lua", "")
-    require('plugins_config/'..file)
+    require('plugins/'..file)
 end

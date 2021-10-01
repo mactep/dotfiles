@@ -7,7 +7,6 @@ local present, lspinstall = pcall(require, 'lspinstall')
 if not present then
     return
 end
-lspinstall.setup()
 
 local on_attach = function(client, bufnr)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -52,9 +51,20 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-local servers = lspinstall.installed_servers()
-for _, server in pairs(servers) do
-  lspconfig[server].setup{ on_attach = on_attach, capabilities = capabilities }
+local function setup_servers()
+  lspinstall.setup()
+  local servers = lspinstall.installed_servers()
+  for _, server in pairs(servers) do
+    lspconfig[server].setup{ on_attach = on_attach, capabilities = capabilities }
+  end
+end
+
+setup_servers()
+
+-- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
+require'lspinstall'.post_install_hook = function ()
+  setup_servers()
+  vim.cmd("bufdo e")
 end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(

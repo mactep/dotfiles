@@ -2,6 +2,6 @@
 vim.cmd([[ autocmd! BufEnter init.lua setlocal includeexpr='lua/'.v:fname | lcd %:p:h ]])
 
 require('colorscheme')
-require('keymappings')
+require('keymaps')
 require('settings')
-require('plugins')
+require('plug')
