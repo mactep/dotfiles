@@ -115,8 +115,9 @@ if present then
     map("n", "<leader>fr", "<cmd>Telescope live_grep<cr>", {noremap=true})
     map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", {noremap=true})
     map("n", "<leader>fB", "<cmd>Telescope buffers<cr>", {noremap=true})
-    map("n", "<C-n>",      "<cmd>Telescope file_browser<cr>", {noremap=true})
     map("n", "<leader>fv", "<cmd>lua search_dotfiles()<cr>", {noremap=true})
     map("n", "<leader>fb", "<cmd>lua browse_blog()<cr>", {noremap=true})
     map("n", "<leader>fz", "<cmd>lua browse_zk()<cr>", {noremap=true})
+    -- This is not complete by now, using netrw instead
+    -- map("n", "<C-n>",      "<cmd>Telescope file_browser<cr>", {noremap=true})
 end

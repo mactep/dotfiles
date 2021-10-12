@@ -13,10 +13,9 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.undofile = true
 vim.opt.swapfile = false
-
--- vim.opt.pumheight = 12
+vim.opt.pumheight = 12
+vim.opt.updatetime = 500
 -- vim.opt.helplang = 'en'
--- vim.opt.updatetime = 500
 -- vim.g.tex_flavor = 'latex'
 
 -- identation

@@ -5,3 +5,10 @@ require('colorscheme')
 require('keymaps')
 require('settings')
 require('plug')
+
+local plugin_dir = vim.fn.stdpath('config')..'/lua/plugins'
+local p = io.popen('find "'..plugin_dir..'" -type f -printf "%f\n"')
+for file in p:lines() do
+    file = string.gsub(file, ".lua", "")
+    require('plugins/'..file)
+end

@@ -1,7 +1,3 @@
--- this should be loaded before the plugin.
--- waiting for a fix from de plugin side
-vim.g.nvim_tree_auto_close = 1
-
 local install_path = vim.fn.stdpath("data") .. "/site/pack/paqs/opt/paq-nvim"
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
@@ -18,9 +14,6 @@ vim.cmd([[
 vim.cmd[[ packadd paq-nvim ]]
 require 'paq' {
     {'savq/paq-nvim', opt=true};
-
-    -- git
-    'tpope/vim-fugitive';
 
     -- lsp
     'neovim/nvim-lspconfig';
@@ -41,20 +34,19 @@ require 'paq' {
     'npxbr/gruvbox.nvim';
     'nvim-treesitter/nvim-treesitter';
     'norcalli/nvim-colorizer.lua';
-
-    -- ui
     'lukas-reineke/indent-blankline.nvim';
+
+    -- tools
+    'tpope/vim-fugitive';
+    'numToStr/FTerm.nvim';
+    'nvim-telescope/telescope.nvim';
+    'NTBBloodbath/rest.nvim';
 
     -- utility
     'nvim-lua/plenary.nvim';
-    'nvim-telescope/telescope.nvim';
     {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' };
     'tpope/vim-abolish';
-}
 
-local plugin_dir = vim.fn.stdpath('config')..'/lua/plugins'
-local p = io.popen('find "'..plugin_dir..'" -type f -printf "%f\n"')
-for file in p:lines() do
-    file = string.gsub(file, ".lua", "")
-    require('plugins/'..file)
-end
+    -- golang
+    'buoto/gotests-vim';
+}
