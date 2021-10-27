@@ -1,12 +1,16 @@
 -- makes it easier to go to lua files
 vim.cmd([[ autocmd! BufEnter init.lua setlocal includeexpr='lua/'.v:fname | lcd %:p:h ]])
 
-require('plugins/paq')
 require('colorscheme')
-require('keymappings')
+require('keymaps')
 require('settings')
-require('plugins/coc')
-require('plugins/snap')
-require('plugins/treesitter')
-require('plugins/nvim-colorizer')
-require('plugins/indent-blankline')
+require('plugins')
+
+completion_engine = 'coc'
+
+local plugin_dir = vim.fn.stdpath('config')..'/lua/plugins'
+local p = io.popen('find "'..plugin_dir..'" -type f -printf "%f\n"')
+for file in p:lines() do
+    file = string.gsub(file, ".lua", "")
+    require('plugins/'..file)
+end
