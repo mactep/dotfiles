@@ -3,11 +3,6 @@ if not present then
     return
 end
 
-local present, lspinstall = pcall(require, 'lspinstall')
-if not present then
-    return
-end
-
 local on_attach = function(client, bufnr)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -18,8 +13,8 @@ local on_attach = function(client, bufnr)
     local opts = { noremap=true, silent=true }
     buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    -- buf_set_keymap('n', 'vgd', '<cmd>vsp<CR><cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    -- buf_set_keymap('n', 'xgd', '<cmd>sp<CR><cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    buf_set_keymap('n', 'vgd', '<cmd>vsp<CR><cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    buf_set_keymap('n', 'xgd', '<cmd>sp<CR><cmd>lua vim.lsp.buf.definition()<CR>', opts)
     buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
     buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
     buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
@@ -53,21 +48,14 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-local function setup_servers()
-  lspinstall.setup()
-  local servers = lspinstall.installed_servers()
-  for _, server in pairs(servers) do
-    lspconfig[server].setup{ on_attach = on_attach, capabilities = capabilities }
-  end
-end
+local lsp_installer = require("nvim-lsp-installer")
 
-setup_servers()
+lsp_installer.on_server_ready(function(server)
+    local opts = {on_attach = on_attach, capabilities = capabilities}
 
--- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
-require'lspinstall'.post_install_hook = function ()
-  setup_servers()
-  vim.cmd("bufdo e")
-end
+    server:setup(opts)
+    vim.cmd [[ do User LspAttachBuffers ]]
+end)
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {

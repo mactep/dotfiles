@@ -37,5 +37,5 @@ vim.opt.signcolumn='number'
 
 vim.cmd('command Bd bp|bd #')
 
-vim.cmd([[:let &winheight = &lines * 7 / 10]])
-vim.cmd([[:let &winwidth = &columns * 7 / 10]])
+-- vim.cmd([[:let &winheight = &lines * 7 / 10]])
+-- vim.cmd([[:let &winwidth = &columns * 7 / 10]])

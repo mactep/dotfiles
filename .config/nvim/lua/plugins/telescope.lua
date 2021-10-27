@@ -1,14 +1,14 @@
-local file = io.open(os.getenv("HOME").."/.local/bin/fzf", "r")
-
-if file == nil then
-    os.execute([[
-    curl -s https://api.github.com/repos/junegunn/fzf/releases/latest \
-    | grep "fzf-.*-linux_amd64.tar.gz" | cut -d : -f 2,3 | tr -d \" \
-    | wget -q -i - -O - | tar xvz -C ~/.local/bin/
-    ]])
-else
-    io.close(file)
-end
+-- local file = io.open(os.getenv("HOME").."/.local/bin/fzf", "r")
+-- 
+-- if file == nil then
+--     os.execute([[
+--     curl -s https://api.github.com/repos/junegunn/fzf/releases/latest \
+--     | grep "fzf-.*-linux_amd64.tar.gz" | cut -d : -f 2,3 | tr -d \" \
+--     | wget -q -i - -O - | tar xvz -C ~/.local/bin/
+--     ]])
+-- else
+--     io.close(file)
+-- end
 
 local present, telescope = pcall(require, "telescope")
 if present then

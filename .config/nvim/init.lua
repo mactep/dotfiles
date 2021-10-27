@@ -4,7 +4,9 @@ vim.cmd([[ autocmd! BufEnter init.lua setlocal includeexpr='lua/'.v:fname | lcd 
 require('colorscheme')
 require('keymaps')
 require('settings')
-require('plug')
+require('plugins')
+
+completion_engine = 'coc'
 
 local plugin_dir = vim.fn.stdpath('config')..'/lua/plugins'
 local p = io.popen('find "'..plugin_dir..'" -type f -printf "%f\n"')
