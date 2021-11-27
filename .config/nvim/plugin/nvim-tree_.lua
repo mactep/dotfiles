@@ -18,6 +18,6 @@ if present then
     }
 
 
-    map('n', '<C-n>', ':NvimTreeToggle<CR>', {noremap = true})
-    map('n', '<leader>r', ':NvimTreeRefresh<CR>', {noremap = true})
+    vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', {noremap = true})
+    vim.api.nvim_set_keymap('n', '<leader>r', ':NvimTreeRefresh<CR>', {noremap = true})
 end

@@ -30,10 +30,10 @@ if present then
     luasnip.lazy_load()
 end
 
-map('i', '<C-j>', "luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<C-j>'", {silent=true, expr=true})
-map('i', '<C-k>', '<Plug>luasnip-jump-prev', {silent=true})
-map('s', '<C-j>', '<Plug>luasnip-jump-next', {silent=true})
-map('s', '<C-k>', '<Plug>luasnip-jump-prev', {silent=true})
+vim.api.nvim_set_keymap('i', '<C-j>', "luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<C-j>'", {silent=true, expr=true})
+vim.api.nvim_set_keymap('i', '<C-k>', '<Plug>luasnip-jump-prev', {silent=true})
+vim.api.nvim_set_keymap('s', '<C-j>', '<Plug>luasnip-jump-next', {silent=true})
+vim.api.nvim_set_keymap('s', '<C-k>', '<Plug>luasnip-jump-prev', {silent=true})
 
 local present, autopairs = pcall(require, 'nvim-autopairs')
 if present then
