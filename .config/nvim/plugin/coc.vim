@@ -60,7 +60,7 @@ nmap <leader>ca  <Plug>(coc-codeaction)
 nmap <leader>qf  <Plug>(coc-fix-current)
 
 let g:coc_snippet_next = '<tab>'
-let g:coc_global_extensions = ['coc-explorer', 'coc-snippets', 'coc-go', 'coc-angular', 'coc-python', 'coc-tsserver']
+let g:coc_global_extensions = ['coc-explorer', 'coc-snippets', 'coc-go', 'coc-angular', 'coc-pyright', 'coc-tsserver']
 
 
 " coc-explorer

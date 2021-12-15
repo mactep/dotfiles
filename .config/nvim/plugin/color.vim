@@ -34,9 +34,9 @@ highlight! link TSNumber Purple
 highlight! link TSOperator Orange
 highlight! link TSParameter Blue
 highlight! link TSParameterReference Fg
-highlight! link TSProperty Yellow
+highlight! link TSProperty Blue
 highlight! link TSPunctBracket Orange
-highlight! link TSPunctDelimiter Grey
+highlight! link TSPunctDelimiter Orange
 highlight! link TSPunctSpecial Blue
 highlight! link TSRepeat Red
 highlight! link TSString Green

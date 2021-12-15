@@ -12,7 +12,7 @@ func! zk#edit(...)
   " edit the new file
   exec "e " . l:fname
 
-  " enter the title and timestamp (using ultisnips) in the new file
+  " enter the title in the new file
   if len(a:000) > 0
     exec "normal ggO# " . join(a:000) . "\<cr>\<esc>G"
   endif

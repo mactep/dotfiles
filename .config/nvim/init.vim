@@ -1,4 +1,4 @@
-" vim:fdm=marker:fdl=0
+" Neovim config
 " Settings {{{
 set clipboard=unnamed
 set hidden
@@ -56,8 +56,8 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-" map('n', '<A-l>', ':bn<CR>', {noremap=true})
-" map('n', '<A-h>', ':bp<CR>', {noremap=true})
+nnoremap <A-l> <cmd>bn<CR>
+nnoremap <A-h> <cmd>bp<CR>
 " map('n', '<Backspace>', '<C-^>', {noremap=true})
 " 
 " map('t', '<Esc>', [[<C-\><C-n> ]], {noremap=true})
@@ -68,10 +68,10 @@ nnoremap <C-l> <C-w>l
 " 
 " map('n', '<Leader>s', [[:%s/\<<C-r><C-w>\>/ ]], {noremap=true})
 " 
-" -- don't save change operation to unnamed register
-" map('n', 'c', '"_c', {noremap=true})
-" map('n', 'C', '"_C', {noremap=true})
-" 
+" don't save change operation to unnamed register
+nnoremap c "_c
+nnoremap C "_C
+
 " -- dot repetition over visual line selections
 " map('x', '.', ':norm.<CR>', {noremap=true})
 
@@ -115,6 +115,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sainnhe/gruvbox-material'
 Plug 'gruvbox-community/gruvbox'
 Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/playground'
 Plug 'lukas-reineke/indent-blankline.nvim'
 
 " git
@@ -134,6 +135,8 @@ Plug 'ThePrimeagen/refactoring.nvim'
 
 " note taking
 Plug 'vimwiki/vimwiki', {'branch': 'dev'}
+Plug 'tools-life/taskwiki'
 
 call plug#end()
 "}}}
+" vim:fdm=marker:fdl=0
