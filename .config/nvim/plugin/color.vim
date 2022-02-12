@@ -1,8 +1,9 @@
+set termguicolors
+
 let g:gruvbox_material_palette = 'mix'
 let g:gruvbox_sign_column = 'bg0'
 let g:gruvbox_material_sign_column_background = 'none'
 let g:gruvbox_invert_selection = 0
-set termguicolors
 colorscheme gruvbox-material
 
 " Better treesitter colors
@@ -12,24 +13,24 @@ highlight! link TSBoolean Purple
 highlight! link TSCharacter Green
 highlight! link TSComment Comment
 highlight! link TSConditional Red
-highlight! link TSConstBuiltin BlueItalic
+highlight! link TSConstBuiltin Orange
 highlight! link TSConstMacro BlueItalic
 highlight! link TSConstant Fg
 highlight! link TSConstructor OrangeBold
 highlight! link TSException Red
-highlight! link TSField Green
+highlight! link TSField Blue
 highlight! link TSFloat Purple
 highlight! link TSFuncBuiltin GreenBold
 highlight! link TSFuncMacro GreenBold
-highlight! link TSFunction Green
+highlight! link TSFunction Aqua
 highlight! link TSInclude Aqua
 highlight! link TSKeyword Red
 highlight! link TSKeywordFunction Red
 highlight! link TSKeywordOperator Orange
 highlight! link TSLabel Orange
-highlight! link TSMethod Green
+highlight! link TSMethod Aqua
 highlight! link TSNamespace YellowItalic
-highlight! link TSNone Fg
+highlight! link TSNone Orange
 highlight! link TSNumber Purple
 highlight! link TSOperator Orange
 highlight! link TSParameter Blue
