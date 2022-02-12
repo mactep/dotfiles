@@ -109,11 +109,13 @@ call plug#begin(stdpath('data') . '/plugged')
 
 " completion
 Plug 'github/copilot.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
 
 " colorscheme and highlighting
 Plug 'sainnhe/gruvbox-material'
 Plug 'gruvbox-community/gruvbox'
+Plug 'yassinebridi/vim-purpura'
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/playground'
 Plug 'lukas-reineke/indent-blankline.nvim'
@@ -135,7 +137,6 @@ Plug 'ThePrimeagen/refactoring.nvim'
 
 " note taking
 Plug 'vimwiki/vimwiki', {'branch': 'dev'}
-Plug 'tools-life/taskwiki'
 
 call plug#end()
 "}}}

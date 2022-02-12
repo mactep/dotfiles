@@ -1,4 +1,0 @@
-{
-    "python.formatting.autopep8Path": "~/.local/bin/autopep8",
-    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
-}
