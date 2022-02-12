@@ -26,7 +26,7 @@ highlight! link TSFunction Aqua
 highlight! link TSInclude Aqua
 highlight! link TSKeyword Red
 highlight! link TSKeywordFunction Red
-highlight! link TSKeywordOperator Orange
+highlight! link TSKeywordOperator Red
 highlight! link TSLabel Orange
 highlight! link TSMethod Aqua
 highlight! link TSNamespace YellowItalic

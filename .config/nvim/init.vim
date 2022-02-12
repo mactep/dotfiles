@@ -17,6 +17,7 @@ set undofile
 set noswapfile
 set pumheight=12
 set updatetime=500
+set completeopt=menuone,noinsert,noselect
 
 " identation
 set expandtab
@@ -24,6 +25,7 @@ set tabstop=4
 set shiftwidth=4
 set shiftround
 set softtabstop=4
+
 
 " terminal
 autocmd TermOpen * setlocal nonumber norelativenumber
@@ -34,6 +36,7 @@ autocmd VimResized * wincmd =
 
 command Bd bp|bd #
 
+" Don't insert a comment on newline
 augroup comments
     autocmd!
     autocmd BufEnter * set fo-=c fo-=r fo-=o
@@ -129,6 +132,7 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
+    Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'NTBBloodbath/rest.nvim'
 
 " utility

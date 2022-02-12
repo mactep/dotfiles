@@ -16,6 +16,8 @@ if present then
             end
         end)
     end
+
+    local fb_actions = telescope.extensions.file_browser.actions
     telescope.setup{
         defaults = {
             sorting_strategy = "ascending",
@@ -27,9 +29,6 @@ if present then
             buffer_previewer_maker = new_maker,
         },
         pickers = {
-            file_browser = {
-                dir_icon = "|"
-            },
             live_grep = {
                 debounce = 100,
             },
@@ -39,10 +38,24 @@ if present then
                     n = { ["<c-d>"] = "delete_buffer" }
                 }
             }
+        },
+        extensions = {
+            file_browser = {
+                initial_mode = "normal",
+                mappings = {
+                    n = {
+                        ["l"] = "select_default",
+                        ["h"] = fb_actions.goto_parent_dir,
+                        ["H"] = fb_actions.toggle_hidden,
+                        ["<Tab>"] = "toggle_selection"
+                    }
+                }
+            },
         }
     }
 
     telescope.load_extension("fzf")
+    telescope.load_extension("file_browser")
 
     search_dotfiles = function()
         require("telescope.builtin").find_files({
@@ -52,7 +65,7 @@ if present then
     end
 
     browse_blog = function()
-        require("telescope.builtin").file_browser({
+        telescope.extensions.file_browser.file_browser({
             prompt_title = "Blog",
             cwd = "~/code/mactep.github.io/_posts",
         })
@@ -80,6 +93,7 @@ if present then
     vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", {noremap=true})
     vim.api.nvim_set_keymap("n", "<leader>fr", "<cmd>Telescope live_grep<cr>", {noremap=true})
     vim.api.nvim_set_keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", {noremap=true})
+    vim.api.nvim_set_keymap("n", "<C-n>", "<cmd>Telescope file_browser<cr>", {noremap=true})
     vim.api.nvim_set_keymap("n", "<leader>fB", "<cmd>Telescope buffers<cr>", {noremap=true})
     vim.api.nvim_set_keymap("n", "<leader>fv", "<cmd>lua search_dotfiles()<cr>", {noremap=true})
     vim.api.nvim_set_keymap("n", "<leader>fb", "<cmd>lua browse_blog()<cr>", {noremap=true})
