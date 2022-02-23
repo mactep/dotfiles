@@ -29,6 +29,9 @@ if present then
             buffer_previewer_maker = new_maker,
         },
         pickers = {
+            find_files = {
+                hidden = true,
+            },
             live_grep = {
                 debounce = 100,
             },
@@ -47,7 +50,8 @@ if present then
                         ["l"] = "select_default",
                         ["h"] = fb_actions.goto_parent_dir,
                         ["H"] = fb_actions.toggle_hidden,
-                        ["<Tab>"] = "toggle_selection"
+                        ["<Tab>"] = "toggle_selection",
+                        ["a"] = fb_actions.create,
                     }
                 }
             },

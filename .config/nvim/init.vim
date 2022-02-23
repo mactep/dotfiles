@@ -17,7 +17,7 @@ set undofile
 set noswapfile
 set pumheight=12
 set updatetime=500
-set completeopt=menuone,noinsert,noselect
+set completeopt=menu,menuone
 
 " identation
 set expandtab
@@ -114,6 +114,15 @@ call plug#begin(stdpath('data') . '/plugged')
 Plug 'github/copilot.vim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+    Plug 'nvim-lua/plenary.nvim'
 
 " colorscheme and highlighting
 Plug 'sainnhe/gruvbox-material'
@@ -138,6 +147,7 @@ Plug 'NTBBloodbath/rest.nvim'
 " utility
 Plug 'tpope/vim-abolish'
 Plug 'ThePrimeagen/refactoring.nvim'
+Plug 'norcalli/nvim-colorizer.lua'
 
 " note taking
 Plug 'vimwiki/vimwiki', {'branch': 'dev'}
