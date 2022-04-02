@@ -23,6 +23,9 @@ font pango:JetBrainsMono Nerd Font 8
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex-autostart --autostart --environment i3
 
+# policy kit
+exec --no-startup-id lxpolkit
+
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
@@ -41,11 +44,19 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec urxvt
+
+# start the default file manager
+bindsym Mod4+e exec xdg-open ~
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -97,7 +108,7 @@ bindsym $mod+f fullscreen toggle
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+# bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -217,7 +228,7 @@ client.urgent           $red      $red      $fg     $red      $red
 exec --no-startup-id ~/.fehbg
 
 # screenshot
-bindsym --release $mod+Print exec /usr/bin/gnome-screenshot -a
+bindsym --release Print exec --no-startup-id "import png:- | xclip -selection c -t image/png"
 
 # configure specific windows
 for_window [class="Steam"] floating enable
@@ -231,4 +242,5 @@ for_window [class="Matplotlib"] floating enable
 for_window [class="discord"] floating enable
 for_window [class="scrcpy"] floating enable
 for_window [class="explorer.exe"] floating enable
+for_window [class="Anki"] floating enable
 for_window [class="Spotify"] move to workspace $ws8
