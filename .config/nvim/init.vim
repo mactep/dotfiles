@@ -17,7 +17,7 @@ set undofile
 set noswapfile
 set pumheight=12
 set updatetime=500
-set completeopt=menu,menuone
+set completeopt=menu,menuone,noselect
 
 " identation
 set expandtab
@@ -41,6 +41,10 @@ augroup comments
     autocmd!
     autocmd BufEnter * set fo-=c fo-=r fo-=o
 augroup END
+
+" global statusline
+" set laststatus=3
+highlight WinSeparator guibg=None
 " }}}
 " Keymaps {{{
 let mapleader = ","
@@ -63,11 +67,11 @@ nnoremap <A-l> <cmd>bn<CR>
 nnoremap <A-h> <cmd>bp<CR>
 " map('n', '<Backspace>', '<C-^>', {noremap=true})
 " 
-" map('t', '<Esc>', [[<C-\><C-n> ]], {noremap=true})
-" map('t', '<C-j>', [[<C-\><C-n><C-w>j ]], {noremap=true})
-" map('t', '<C-k>', [[<C-\><C-n><C-w>k ]], {noremap=true})
-" map('t', '<C-h>', [[<C-\><C-n><C-w>h ]], {noremap=true})
-" map('t', '<C-l>', [[<C-\><C-n><C-w>l ]], {noremap=true})
+tnoremap <Esc> <C-\><C-n>
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-l> <C-\><C-n><C-w>l
 " 
 " map('n', '<Leader>s', [[:%s/\<<C-r><C-w>\>/ ]], {noremap=true})
 " 
@@ -100,6 +104,8 @@ vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 
 nnoremap gf <cmd>e <cfile><cr>
+
+nnoremap <BS> <C-^>
 " }}}
 " Plugins {{{
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
@@ -148,9 +154,6 @@ Plug 'NTBBloodbath/rest.nvim'
 Plug 'tpope/vim-abolish'
 Plug 'ThePrimeagen/refactoring.nvim'
 Plug 'norcalli/nvim-colorizer.lua'
-
-" note taking
-Plug 'vimwiki/vimwiki', {'branch': 'dev'}
 
 call plug#end()
 "}}}
