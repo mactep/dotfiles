@@ -3,6 +3,9 @@ if not present then
     return
 end
 
+vim.cmd([[ let g:copilot_no_tab_map = v:true ]])
+vim.cmd([[ imap <expr> <Plug>(vimrc:copilot-dummy-map) copilot#Accept("\<Tab>") ]])
+
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -18,13 +21,16 @@ cmp.setup({
       i = cmp.mapping.abort(),
       c = cmp.mapping.close(),
     }),
-    ['<Tab>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<Tab>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-g>'] = cmp.mapping(function(fallback)
+      vim.api.nvim_feedkeys(vim.fn['copilot#Accept'](vim.api.nvim_replace_termcodes('<Tab>', true, true, true)), 'n', true)
+    end)
   },
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'vsnip' },
   }, {
+    { name = 'path' },
     { name = 'buffer' },
   })
 })
@@ -36,13 +42,3 @@ cmp.setup.filetype('gitcommit', {
     { name = 'buffer' },
   })
 })
-
-function QuickFix()
-    vim.cmd('startinsert!')
-    require'cmp'.complete()
-    require'cmp'.select_next_item()
-    require'cmp'.confirm()
-end
-local opts = { noremap=true, silent=true }
-vim.api.nvim_set_keymap('n', '<C-a>', '<cmd>lua QuickFix()<CR>', opts)
-vim.api.nvim_set_keymap('i', '<C-a>', '<cmd>lua QuickFix()<CR>', opts)
