@@ -26,7 +26,6 @@ set shiftwidth=4
 set shiftround
 set softtabstop=4
 
-
 " terminal
 autocmd TermOpen * setlocal nonumber norelativenumber
 autocmd TermOpen * startinsert
@@ -43,7 +42,7 @@ augroup comments
 augroup END
 
 " global statusline
-" set laststatus=3
+set laststatus=3
 highlight WinSeparator guibg=None
 " }}}
 " Keymaps {{{
