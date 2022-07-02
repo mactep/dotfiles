@@ -3,7 +3,7 @@ if present then
     treesitter_configs.setup({
         ensure_installed = {
             'c', 'html', 'python', 'javascript', 'typescript', 'lua', 'go',
-            'comment', 'css', 'rust', 'http', 'json', 'markdown'
+            'comment', 'css', 'rust', 'json'
         },
         highlight = { enable = true },
         playground = {
