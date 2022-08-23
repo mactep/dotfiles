@@ -1,5 +1,13 @@
-setlocal spelllang=en,pt-br spell tw=79 cc=80
+setlocal spelllang=en,pt-br spell 
 setlocal path+=$HOME/Dropbox/notes
+
+" breaking long lines into newer ones
+" setlocal tw=79 cc=80
+" setlocal cocu=nc cole=2
+
+" wrapping long lines
+setlocal wrap linebreak
+setlocal cole=2
 
 " ignores anchor at the end of the file name
 " setlocal isfname-=#

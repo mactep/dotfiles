@@ -26,6 +26,9 @@ set shiftwidth=4
 set shiftround
 set softtabstop=4
 
+" I don't use cpp
+let g:c_syntax_for_h = 1
+
 " terminal
 autocmd TermOpen * setlocal nonumber norelativenumber
 autocmd TermOpen * startinsert
@@ -152,7 +155,10 @@ Plug 'NTBBloodbath/rest.nvim'
 " utility
 Plug 'tpope/vim-abolish'
 Plug 'ThePrimeagen/refactoring.nvim'
+    Plug 'nvim-treesitter/nvim-treesitter'
+    Plug 'nvim-lua/plenary.nvim'
 Plug 'norcalli/nvim-colorizer.lua'
+Plug 'vimwiki/vimwiki', {'branch': 'dev'}
 
 call plug#end()
 "}}}

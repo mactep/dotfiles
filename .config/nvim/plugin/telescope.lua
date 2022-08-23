@@ -4,13 +4,15 @@ if present then
 	telescope.setup({
 		defaults = {
 			preview = {
-				-- makes telescope more responsive
+				-- makes binary preview faster
 				msg_bg_fillchar = " ",
 			},
 		},
 		extensions = {
 			file_browser = {
+				hijack_netrw = true,
 				initial_mode = "normal",
+				respect_gitignore = true,
 				mappings = {
 					n = {
 						["l"] = "select_default",
@@ -61,6 +63,7 @@ if present then
 	end
 
 	vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { noremap = true })
+	vim.api.nvim_set_keymap("n", "<leader>fi", "<cmd>Telescope find_files no_ignore=true<cr>", { noremap = true })
 	vim.api.nvim_set_keymap("n", "<leader>fr", "<cmd>Telescope live_grep<cr>", { noremap = true })
 	vim.api.nvim_set_keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { noremap = true })
 	vim.api.nvim_set_keymap("n", "<C-n>", "<cmd>Telescope file_browser<cr>", { noremap = true })
