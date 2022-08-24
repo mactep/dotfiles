@@ -1,0 +1,1 @@
+alias dotfiles='git --git-dir=/home/mactep/.dotfiles/ --work-tree=/home/mactep'
