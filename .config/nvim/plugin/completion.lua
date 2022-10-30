@@ -3,6 +3,7 @@ if not present then
 	return
 end
 
+vim.cmd([[ let g:copilot_filetypes = { 'yaml': v:true, 'markdown': v:true } ]])
 vim.cmd([[ let g:copilot_no_tab_map = v:true ]])
 vim.cmd([[ imap <expr> <Plug>(vimrc:copilot-dummy-map) copilot#Accept("\<Tab>") ]])
 

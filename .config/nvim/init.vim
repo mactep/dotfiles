@@ -19,6 +19,12 @@ set pumheight=12
 set updatetime=500
 set completeopt=menu,menuone,noselect
 
+" enable when it gets available
+set splitkeep=screen
+
+" disable mouse
+set mouse=
+
 " identation
 set expandtab
 set tabstop=4
@@ -26,7 +32,7 @@ set shiftwidth=4
 set shiftround
 set softtabstop=4
 
-" I don't use cpp
+" I don't do cpp
 let g:c_syntax_for_h = 1
 
 " terminal
@@ -36,6 +42,7 @@ autocmd TermOpen * startinsert
 " resizes splits equally after resizing vim
 autocmd VimResized * wincmd =
 
+" delete buffer but keep window
 command Bd bp|bd #
 
 " Don't insert a comment on newline
@@ -67,16 +74,13 @@ nnoremap <C-l> <C-w>l
 
 nnoremap <A-l> <cmd>bn<CR>
 nnoremap <A-h> <cmd>bp<CR>
-" map('n', '<Backspace>', '<C-^>', {noremap=true})
-" 
+
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-k> <C-\><C-n><C-w>k
 tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-l> <C-\><C-n><C-w>l
-" 
-" map('n', '<Leader>s', [[:%s/\<<C-r><C-w>\>/ ]], {noremap=true})
-" 
+
 " don't save change operation to unnamed register
 nnoremap c "_c
 nnoremap C "_C
@@ -138,27 +142,34 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'yassinebridi/vim-purpura'
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/playground'
+
+" code overview
 Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'phelipetls/jsonpath.nvim'
+    Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'norcalli/nvim-colorizer.lua'
 
 " git
 Plug 'tpope/vim-fugitive'
 Plug 'lewis6991/gitsigns.nvim'
     Plug 'nvim-lua/plenary.nvim'
 
-" tools
+" fuzzy finding
 Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
     Plug 'nvim-telescope/telescope-file-browser.nvim'
-Plug 'NTBBloodbath/rest.nvim'
 
 " utility
-Plug 'tpope/vim-abolish'
+Plug 'NTBBloodbath/rest.nvim'
 Plug 'ThePrimeagen/refactoring.nvim'
     Plug 'nvim-treesitter/nvim-treesitter'
     Plug 'nvim-lua/plenary.nvim'
-Plug 'norcalli/nvim-colorizer.lua'
 Plug 'vimwiki/vimwiki', {'branch': 'dev'}
+
+" UX
+Plug 'karb94/neoscroll.nvim'
+Plug 'tpope/vim-abolish'
 
 call plug#end()
 "}}}

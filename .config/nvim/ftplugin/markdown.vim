@@ -1,4 +1,4 @@
-setlocal spelllang=en,pt-br spell 
+setlocal spelllang=en,pt spell 
 setlocal path+=$HOME/Dropbox/notes
 
 " breaking long lines into newer ones
