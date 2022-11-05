@@ -125,7 +125,8 @@ call plug#begin(stdpath('data') . '/plugged')
 " completion
 Plug 'github/copilot.vim'
 Plug 'neovim/nvim-lspconfig'
-Plug 'williamboman/nvim-lsp-installer'
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -139,7 +140,6 @@ Plug 'jose-elias-alvarez/null-ls.nvim'
 " colorscheme and highlighting
 Plug 'sainnhe/gruvbox-material'
 Plug 'gruvbox-community/gruvbox'
-Plug 'yassinebridi/vim-purpura'
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/playground'
 
