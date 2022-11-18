@@ -20,7 +20,7 @@ set updatetime=500
 set completeopt=menu,menuone,noselect
 
 " enable when it gets available
-set splitkeep=screen
+" set splitkeep=screen
 
 " disable mouse
 set mouse=
