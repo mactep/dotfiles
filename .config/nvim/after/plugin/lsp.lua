@@ -107,6 +107,18 @@ mason_lspconfig.setup_handlers({
                 on_attach(client, bufrn)
             end
         })
+    end,
+    ["texlab"] = function()
+        lspconfig.texlab.setup({
+            settings = {
+                texlab = {
+                    build = {
+                        executable = "tectonic",
+                        args = { "%f", "--synctex", "--keep-logs", "--keep-intermediates" },
+                    }
+                }
+            }
+        })
     end
 })
 
