@@ -1,4 +1,4 @@
-" Neovim config
+vim.cmd([[
 " Settings {{{
 set clipboard=unnamed
 set hidden
@@ -91,14 +91,16 @@ nnoremap C "_C
 " center the screen after jumping
 nnoremap {  {zz
 nnoremap }  }zz
-nnoremap n  nzz
-nnoremap N  Nzz
+nnoremap n  nzzzv
+nnoremap N  Nzzzv
 nnoremap ]c ]czz
 nnoremap [c [czz
 nnoremap [j <C-o>zz
 nnoremap ]j <C-i>zz
 nnoremap ]s ]szz
 nnoremap [s [szz
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
 nnoremap J mzJ`z
 
 " move the selected text up and down
@@ -112,65 +114,44 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 nnoremap gf <cmd>e <cfile><cr>
 
 nnoremap <BS> <C-^>
+
+" paste from clipboard keeping indentation
+inoremap <M-p> <C-r><C-o>"
+nnoremap <M-p> <C-r><C-o>"
+
+" copy to system clipboard
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+
+" replace the word under the cursor
+nnoremap <leader>s :%s/<C-r><C-w>/<C-r><C-r>//gc<left><left><left>
 " }}}
-" Plugins {{{
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
+]])
 
-call plug#begin(stdpath('data') . '/plugged')
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", -- latest stable release
+		lazypath,
+	})
+end
+vim.opt.rtp:prepend(lazypath)
 
-" completion
-Plug 'github/copilot.vim'
-Plug 'neovim/nvim-lspconfig'
-Plug 'williamboman/mason.nvim'
-Plug 'williamboman/mason-lspconfig.nvim'
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/vim-vsnip'
-Plug 'jose-elias-alvarez/null-ls.nvim'
-    Plug 'nvim-lua/plenary.nvim'
+local opts = {
+	defaults = {
+		lazy = true,
+	},
+}
 
-" colorscheme and highlighting
-Plug 'sainnhe/gruvbox-material'
-Plug 'gruvbox-community/gruvbox'
-Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'nvim-treesitter/playground'
+local present, lazy = pcall(require, "lazy")
+if not present then
+	return
+end
 
-" code overview
-Plug 'lukas-reineke/indent-blankline.nvim'
-Plug 'phelipetls/jsonpath.nvim'
-    Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'norcalli/nvim-colorizer.lua'
+lazy.setup("plugins", opts)
 
-" git
-Plug 'tpope/vim-fugitive'
-Plug 'lewis6991/gitsigns.nvim'
-    Plug 'nvim-lua/plenary.nvim'
-
-" fuzzy finding
-Plug 'nvim-telescope/telescope.nvim'
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
-    Plug 'nvim-telescope/telescope-file-browser.nvim'
-
-" utility
-Plug 'NTBBloodbath/rest.nvim'
-Plug 'ThePrimeagen/refactoring.nvim'
-    Plug 'nvim-treesitter/nvim-treesitter'
-    Plug 'nvim-lua/plenary.nvim'
-Plug 'vimwiki/vimwiki', {'branch': 'dev'}
-
-" UX
-Plug 'karb94/neoscroll.nvim'
-Plug 'tpope/vim-abolish'
-
-call plug#end()
-"}}}
-" vim:fdm=marker:fdl=0
+-- vim:fdm=marker:fdl=0
