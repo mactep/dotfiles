@@ -1,7 +1,7 @@
 return {
   {
     "lukas-reineke/indent-blankline.nvim",
-    lazy = false,
+    event = "BufRead",
     opts = {
       show_current_context = true,
       buftype_exclude = { "terminal" },
@@ -20,5 +20,9 @@ return {
   {
     "norcalli/nvim-colorizer.lua",
     ft = { "css", "html" },
+  },
+  {
+    "kyazdani42/nvim-web-devicons",
+    lazy = false,
   },
 }

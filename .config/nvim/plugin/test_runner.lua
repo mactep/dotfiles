@@ -150,5 +150,3 @@ end
 vim.api.nvim_create_user_command("GoTestOnSave", function()
 	attach_to_buffer(vim.api.nvim_get_current_buf(), { "go", "test", "./...", "-v", "-json" })
 end, {})
-
-attach_to_buffer(vim.api.nvim_get_current_buf(), { "go", "test", "./...", "-v", "-json" })

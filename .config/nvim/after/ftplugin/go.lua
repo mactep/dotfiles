@@ -1,0 +1,10 @@
+-- local augroupName = 'GolangAutoFormat'
+-- vim.api.nvim_create_augroup(augroupName, {})
+-- vim.api.nvim_create_autocmd('BufWritePre', {
+--   group = augroupName,
+--   pattern = '*.go',
+--   callback = function()
+--     vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
+--     vim.lsp.buf.format()
+--   end,
+-- })

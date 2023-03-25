@@ -18,9 +18,10 @@ set noswapfile
 set pumheight=12
 set updatetime=500
 set completeopt=menu,menuone,noselect
+set splitkeep=screen
 
-" enable when it gets available
-" set splitkeep=screen
+set termguicolors
+
 
 " disable mouse
 set mouse=
@@ -43,7 +44,7 @@ autocmd TermOpen * startinsert
 autocmd VimResized * wincmd =
 
 " delete buffer but keep window
-command Bd bp|bd #
+command Bd bn|bd #
 
 " Don't insert a comment on newline
 augroup comments
@@ -58,7 +59,7 @@ highlight WinSeparator guibg=None
 " Keymaps {{{
 let mapleader = ","
 
-nnoremap <silent><esc> :noh<CR><esc>
+" nnoremap <silent><esc> :noh<CR><esc>
 
 vnoremap < <gv
 vnoremap > >gv
@@ -72,8 +73,19 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-nnoremap <A-l> <cmd>bn<CR>
-nnoremap <A-h> <cmd>bp<CR>
+nnoremap <silent><A-l> <cmd>bn<CR>
+nnoremap <silent><A-h> <cmd>bp<CR>
+nnoremap <silent>]b <cmd>bn<CR>
+nnoremap <silent>[b <cmd>bp<CR>
+
+nnoremap <silent>]q <cmd>cnext<CR>
+nnoremap <silent>[q <cmd>cprev<CR>
+nnoremap <silent>]Q <cmd>cfirst<CR>
+nnoremap <silent>[Q <cmd>clast<CR>
+
+" jump to<silent> next git conflict marker (<<<<<<<)
+nnoremap <silent>]n /^<\{7\}\s\S*$<CR><cmd>nohl<CR>
+nnoremap <silent>]n ?^<\{7\}\s\S*$<CR><cmd>nohl<CR>
 
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-j> <C-\><C-n><C-w>j
@@ -128,6 +140,7 @@ nnoremap <leader>s :%s/<C-r><C-w>/<C-r><C-r>//gc<left><left><left>
 " }}}
 ]])
 
+-- lazy.nvim {{{
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
@@ -145,6 +158,10 @@ local opts = {
 	defaults = {
 		lazy = true,
 	},
+  dev = {
+    path = "~/code",
+    fallback = true, -- get plugin from git if not found in path
+  },
 }
 
 local present, lazy = pcall(require, "lazy")
@@ -154,4 +171,5 @@ end
 
 lazy.setup("plugins", opts)
 
+-- }}}
 -- vim:fdm=marker:fdl=0

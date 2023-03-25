@@ -1,6 +1,24 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    cmd = { "TSInstall" },
+    ft = {
+      "bash",
+      "c",
+      "css",
+      "go",
+      "graphql",
+      "help",
+      "html",
+      "http",
+      "javascript",
+      "json",
+      "latex",
+      "lua",
+      "python",
+      "rust",
+      "typescript",
+    },
     opts = {
       -- A list of parser names, or "all" (the four listed parsers should always be installed)
       ensure_installed = {
@@ -69,6 +87,7 @@ return {
         cmd = {
           "TSPlaygroundToggle",
           "TSHighlightCapturesUnderCursor",
+          "TSCaptureUnderCursor",
         },
         keys = {
           { "<F2>", "<cmd>TSHighlightCapturesUnderCursor<cr>", desc = "Show highlight group under cursor" },

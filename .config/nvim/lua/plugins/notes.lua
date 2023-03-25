@@ -38,8 +38,9 @@ return {
                   \ call append(0,[
                   \ "# " . strftime("%d/%m/%Y"), "",
                   \ "## Todo",  "",
-                  \ "## Notes",
-                  \ "## Alternative",
+                  \ "## Notes", "",
+                  \ "## Alternative", "",
+                  \ "### Done", "",
                   \ ])
               autocmd BufRead ~/Dropbox/wiki/diary/*.md
                           \ iab <buffer><expr> dt strftime("%c") |

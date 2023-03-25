@@ -30,9 +30,9 @@ return {
       pickers = {
         buffers = {
           mappings = {
-            i = {
-              ["<c-d>"] = require("telescope.actions").delete_buffer,
-            },
+            -- i = {
+            --   ["<c-d>"] = require("telescope.actions").delete_buffer,
+            -- },
             n = {
               ["dd"] = require("telescope.actions").delete_buffer,
             },
@@ -70,6 +70,7 @@ return {
     require("telescope").load_extension("ui-select")
   end,
   keys = {
+    -- Find files
     {
       "<leader>ff",
       function()
@@ -85,11 +86,18 @@ return {
       { noremap = true, desc = "Find files (no ignore)" },
     },
     {
-      "<leader>gf",
+      "<leader>fg",
       function()
         require("telescope.builtin").live_grep()
       end,
       { noremap = true, desc = "Grep files" },
+    },
+    {
+      "<leader>fG",
+      function()
+        require("telescope.builtin").grep_string()
+      end,
+      { noremap = true, desc = "Grep for the string under cursor" },
     },
     {
       "<leader>fh",
@@ -99,12 +107,13 @@ return {
       { noremap = true, desc = "Find help" },
     },
     {
-      "<leader>fB",
+      "<leader>fb",
       function()
         require("telescope.builtin").buffers()
       end,
       { noremap = true, desc = "Find buffers" },
     },
+    -- Neovim config
     {
       "<leader>fv",
       function()
@@ -134,19 +143,19 @@ return {
       end,
     },
     {
-      "<leader>fb",
+      "<leader>fw",
       function()
-        require("telescope").extensions.file_browser.file_browser({
-          prompt_title = "Blog",
-          cwd = "~/code/mactep.github.io/_posts",
+        require("telescope.builtin").find_files({
+          prompt_title = "Find wiki article",
+          cwd = "~/Dropbox/wiki",
         })
       end,
     },
     {
-      "<leader>fw",
+      "<leader>fW",
       function()
         require("telescope.builtin").find_files({
-          prompt_title = "Find Wiki",
+          prompt_title = "Find wiki link",
           cwd = "~/Dropbox/wiki",
           attach_mappings = function(_, map)
             map("i", "<CR>", function(prompt_bufnr)
@@ -164,6 +173,15 @@ return {
       end,
     },
     {
+      "<leader>fB",
+      function()
+        require("telescope").extensions.file_browser.file_browser({
+          prompt_title = "Blog",
+          cwd = "~/code/mactep.github.io/_posts",
+        })
+      end,
+    },
+    {
       "<C-n>",
       function()
         require("telescope").extensions.file_browser.file_browser()
@@ -177,6 +195,49 @@ return {
           path = "%:p:h",
         })
       end,
+    },
+    -- Git objects
+    {
+      "<leader>gc",
+      function()
+        require("telescope.builtin").git_commits()
+      end,
+      { noremap = true, desc = "Git commits" },
+    },
+    {
+      "<leader>gb",
+      function()
+        require("telescope.builtin").git_branches()
+      end,
+      { noremap = true, desc = "Git branches" },
+    },
+    {
+      "<leader>gs",
+      function()
+        require("telescope.builtin").git_status()
+      end,
+      { noremap = true, desc = "Git status" },
+    },
+    {
+      "<leader>gS",
+      function()
+        require("telescope.builtin").git_stash()
+      end,
+      { noremap = true, desc = "Git stash" },
+    },
+    {
+      "<leader>gf",
+      function()
+        require("telescope.builtin").git_files()
+      end,
+      { noremap = true, desc = "Git files" },
+    },
+    {
+      "<leader>gF",
+      function()
+        require("telescope.builtin").git_bcommits()
+      end,
+      { noremap = true, desc = "Git commits for current buffer" },
     },
   },
 }
