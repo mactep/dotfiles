@@ -1,0 +1,6 @@
+if [ ! -f "$HOME/go/bin/gofumpt" ]; then
+    go install mvdan.cc/gofumpt@latest
+fi
+if [ ! -f "$HOME/go/bin/revive" ]; then
+    go install github.com/mgechev/revive@latest
+fi

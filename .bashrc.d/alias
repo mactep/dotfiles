@@ -1,1 +1,2 @@
-alias dotfiles='git --git-dir=/home/mactep/.dotfiles/ --work-tree=/home/mactep'
+alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias ndotfiles='GIT_DIR=$HOME/.dotfiles/ GIT_WORK_TREE=$HOME nvim'
