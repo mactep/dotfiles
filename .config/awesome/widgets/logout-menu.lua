@@ -22,7 +22,7 @@ local logout_menu_widget = wibox.widget({
             resize = true,
             widget = wibox.widget.imagebox,
         },
-        margins = 4,
+        margins = 2,
         layout = wibox.container.margin,
     },
     shape = function(cr, width, height)
