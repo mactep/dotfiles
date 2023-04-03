@@ -11,7 +11,6 @@ return {
 
       local on_attach = function(_, bufnr)
         vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
         local bufopts = { noremap = true, silent = true, buffer = bufnr }
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
@@ -121,6 +120,9 @@ return {
       vim.diagnostic.config({
         virtual_text = false,
       })
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = "rounded",
+      })
     end,
     dependencies = {
       { "williamboman/mason.nvim", config = true },
@@ -144,15 +146,11 @@ return {
           -- formatting
           null_ls.builtins.formatting.black,
           null_ls.builtins.formatting.isort,
-          -- null_ls.builtins.formatting.markdownlint.with({
           null_ls.builtins.formatting.prettierd,
           -- diagnostics
-          null_ls.builtins.diagnostics.markdownlint.with({
-            extra_filetypes = { "vimwiki" },
-          }),
           null_ls.builtins.diagnostics.revive.with({
             args = {
-              "-config", vim.fn.stdpath("config") .. "/revive.toml",
+              "-config", vim.fn.stdpath("config") .. "/assets/revive.toml",
               "-formatter", "json",
               "./..."
             },

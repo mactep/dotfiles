@@ -1,3 +1,30 @@
+--- Drops the selected stash
+---@param prompt_bufnr number: The prompt bufnr
+local git_drop_stash = function(prompt_bufnr)
+  local action_state = require("telescope.actions.state")
+  local utils = require("telescope.utils")
+  local actions = require("telescope.actions")
+
+  local selection = action_state.get_selected_entry()
+  if selection == nil then
+    utils.__warn_no_selection "actions.git_drop_stash"
+    return
+  end
+  actions.close(prompt_bufnr)
+  local _, ret, stderr = utils.get_os_command_output { "git", "stash", "drop", selection.value }
+  if ret == 0 then
+    utils.notify("actions.git_drop_stash", {
+      msg = string.format("dropped: '%s' ", selection.value),
+      level = "INFO",
+    })
+  else
+    utils.notify("actions.git_drop_stash", {
+      msg = string.format("Error when droping: %s. Git returned: '%s'", selection.value, table.concat(stderr, " ")),
+      level = "ERROR",
+    })
+  end
+end
+
 return {
   "nvim-telescope/telescope.nvim",
   dependencies = {
@@ -8,6 +35,8 @@ return {
   },
   config = function()
     local fb_actions = require("telescope").extensions.file_browser.actions
+    vim.o.grepprg = 'rg --vimgrep'
+    vim.o.grepformat = [[ %f:%l:%c:%m, ]] .. vim.o.grepformat
 
     local dropdown_configs = {
       layout_strategy = "vertical",
@@ -26,6 +55,11 @@ return {
           -- makes binary preview faster
           msg_bg_fillchar = " ",
         },
+        path_display = { "smart" },
+        layout_strategy = "vertical",
+        layout_config = {
+          vertical = { height = 0.95, },
+        },
       },
       pickers = {
         buffers = {
@@ -35,6 +69,16 @@ return {
             -- },
             n = {
               ["dd"] = require("telescope.actions").delete_buffer,
+            },
+          },
+        },
+        git_stash = {
+          mappings = {
+            i = {
+              ["<c-d>"] = git_drop_stash,
+            },
+            n = {
+              ["dd"] = git_drop_stash,
             },
           },
         },
@@ -53,6 +97,16 @@ return {
               ["a"] = fb_actions.create,
               ["<Alt-a>"] = fb_actions.create_from_prompt,
               ["J"] = fb_actions.create_from_prompt,
+              ["r"] = function(prompt_bufnr)
+                fb_actions.rename(prompt_bufnr)
+
+                -- TODO: validate if file has been renamed
+
+                local action_state = require "telescope.actions.state"
+                local file_path = action_state.get_selected_entry()[1]
+                local file_name = vim.split(file_path, "/")[#vim.split(file_path, "/")]
+                vim.cmd([[ :grep! ]] .. file_name)
+              end,
             },
             i = {
               ["<Alt-a>"] = fb_actions.create_from_prompt,

@@ -18,8 +18,9 @@ return {
     },
   },
   {
-    "norcalli/nvim-colorizer.lua",
-    ft = { "css", "html" },
+    "NvChad/nvim-colorizer.lua",
+    cmd = { "ColorizerToggle", "ColorizerAttachToBuffer" },
+    config = true,
   },
   {
     "kyazdani42/nvim-web-devicons",

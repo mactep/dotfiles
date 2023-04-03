@@ -75,6 +75,7 @@ nnoremap <C-l> <C-w>l
 
 nnoremap <silent><A-l> <cmd>bn<CR>
 nnoremap <silent><A-h> <cmd>bp<CR>
+nnoremap <silent><A-d> <cmd>Bd<CR>
 nnoremap <silent>]b <cmd>bn<CR>
 nnoremap <silent>[b <cmd>bp<CR>
 

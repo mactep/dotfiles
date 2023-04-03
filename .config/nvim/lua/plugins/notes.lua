@@ -14,6 +14,7 @@ return {
       "<leader>wi",
       "<leader>w<leader>w",
     },
+    event = "BufRead " .. vim.fn.expand("~/Dropbox/wiki/") .. "**",
     init = function()
       vim.g.vimwiki_global_ext = 0
       vim.g.vimwiki_list = {
