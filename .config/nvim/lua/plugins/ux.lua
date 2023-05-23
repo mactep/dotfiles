@@ -1,3 +1,5 @@
+Lazygit = nil
+
 return {
   {
     "karb94/neoscroll.nvim",
@@ -53,17 +55,51 @@ return {
         function() require('toggleterm').toggle(nil, nil, nil, 'float') end,
         desc = "Toggle terminal",
       },
+      {
+        "<leader>G",
+        function() Lazygit:toggle() end,
+        { noremap = true, silent = true }
+      },
     },
-    config = true,
+    config = function()
+      local Terminal = require('toggleterm.terminal').Terminal
+      Lazygit = Terminal:new({
+          cmd = "lazygit",
+          hidden = true,
+          direction = "float",
+          on_open = function()
+            vim.keymap.del("t", "<Esc>")
+          end,
+          on_close = function()
+            vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
+          end,
+        })
+    end,
   },
   {
     'Wansmer/treesj',
     keys = {
-      { '<leader>st', function() require('treesj').toggle() end },
-      { 'gJ',         function() require('treesj').join() end },
-      { 'gs',         function() require('treesj').split() end },
+      -- { '<leader>st', function() require('treesj').toggle() end },
+      { 'tj', function() require('treesj').join() end },
+      { 'ts', function() require('treesj').split() end },
     },
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     config = true,
-  }
+  },
+  {
+    "christoomey/vim-tmux-navigator",
+    lazy = false,
+    init = function()
+      vim.g.tmux_navigator_no_mappings = 1
+      vim.g.tmux_navigator_disable_when_zoomed = 1
+
+      vim.cmd([[
+        noremap <silent> {Left-Mapping} :<C-U>TmuxNavigateLeft<cr>
+        noremap <silent> {Down-Mapping} :<C-U>TmuxNavigateDown<cr>
+        noremap <silent> {Up-Mapping} :<C-U>TmuxNavigateUp<cr>
+        noremap <silent> {Right-Mapping} :<C-U>TmuxNavigateRight<cr>
+        noremap <silent> {Previous-Mapping} :<C-U>TmuxNavigatePrevious<cr>
+      ]])
+    end,
+  },
 }

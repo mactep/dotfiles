@@ -1,13 +1,4 @@
-local theme_detector_script = vim.fn.stdpath("config") .. "/assets/theme_detector.sh"
-vim.fn.system(theme_detector_script)
-local output = vim.v.shell_error
-
-local theme = 1
-if output == 1 then
-  theme = 3
-else
-  vim.o.background = 'light'
-end
+vim.o.termguicolors = true
 
 local colorschemes = {
   {
@@ -20,16 +11,66 @@ local colorschemes = {
       vim.cmd.colorscheme("gruvbox-material")
     end,
   },
-  { "gruvbox-community/gruvbox" },
+  -- { "gruvbox-community/gruvbox" },
   {
     "AlexvZyl/nordic.nvim",
     config = function()
       require("nordic").load({
         bold_keywords = true,
+        override = {
+          FloatBorder = { fg = "#4C566A", },
+          TelescopePreviewBorder = { fg = "#4C566A", },
+          TelescopePromptBorder = { fg = "#4C566A", },
+          TelescopeResultsBorder = { fg = "#4C566A", },
+          Visual = { bg = "#4C566A", },
+        },
+        telescope = {
+          -- Available styles: `classic`, `flat`.
+          style = 'classic',
+        },
       })
     end,
   },
+  {
+    -- Duskfox for outrun aesthetic
+    "EdenEast/nightfox.nvim",
+    config = function()
+      local variants = { "duskfox", "nightfox", "nordfox" }
+      local variant = tonumber(vim.fn.trim(vim.fn.system("echo $((1 + RANDOM % " .. #variants .. "))")))
+      vim.cmd.colorscheme(variants[variant])
+    end
+  },
+  {
+    "sainnhe/everforest",
+    config = function()
+      vim.g.everforest_background = "medium"
+      vim.cmd.colorscheme("everforest")
+    end,
+  },
+  {
+    "maxmx03/fluoromachine.nvim",
+    config = function()
+      require('fluoromachine').setup {
+        glow = true,
+        theme = 'fluoromachine',
+      }
+
+      vim.cmd.colorscheme('fluoromachine')
+    end,
+  },
 }
+
+local function light_variant()
+  local background_detector_script = vim.fn.stdpath("config") .. "/assets/theme_detector.sh"
+  local output = vim.fn.system(background_detector_script)
+
+  if output ~= 1 then
+    vim.o.background = 'light'
+  end
+end
+
+-- using this to avoid a compiled random number
+local theme = tonumber(vim.fn.trim(vim.fn.system("echo $((1 + RANDOM % " .. #colorschemes .. "))")))
 
 colorschemes[theme].lazy = false
 colorschemes[theme].priority = 1000

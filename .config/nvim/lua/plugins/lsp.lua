@@ -1,7 +1,7 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    ft = { "lua", "python", "go", "tex", "typescript", "javascript", "rust" },
+    ft = { "lua", "python", "go", "tex", "typescript", "javascript", "rust", "openscad" },
     config = function()
       local map_opts = { noremap = true, silent = true }
       vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, map_opts)
@@ -23,12 +23,15 @@ return {
           print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
         end, bufopts)
         vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, bufopts)
-        vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
+        vim.keymap.set("n", "<space>rn", function()
+          return ":IncRename " .. vim.fn.expand("<cword>")
+        end, { noremap = true, silent = true, buffer = bufnr, expr = true })
         vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
         vim.keymap.set("v", "<space>ca", vim.lsp.buf.code_action, bufopts)
         vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
         vim.keymap.set({ "n", "v" }, "<space>f", function()
-          vim.lsp.buf.format({ async = true })
+          vim.lsp.buf.format({ async = false })
+          vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
         end, bufopts)
       end
 
@@ -74,6 +77,7 @@ return {
                   parameterNames = true,
                   rangeVariableTypes = true,
                 },
+                semanticTokens = true,
                 usePlaceholders = true,
                 staticcheck = true,
               },
@@ -119,17 +123,29 @@ return {
 
       vim.diagnostic.config({
         virtual_text = false,
+        float = {
+          border = "rounded",
+        },
       })
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-        border = "rounded",
-      })
+
+      -- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
     end,
     dependencies = {
-      { "williamboman/mason.nvim", config = true },
+      { "williamboman/mason.nvim", config = true, build = ":MasonUpdate" },
       "williamboman/mason-lspconfig.nvim",
       "hrsh7th/cmp-nvim-lsp",
-      -- since it's a dependency, will be setted up before lspconfig
-      { "folke/neodev.nvim",       config = true },
+      "lvimuser/lsp-inlayhints.nvim",
+      -- since it needs to be configure before lspconfig
+      {
+        "folke/neodev.nvim",
+        opts = {
+          library = { plugins = { "nvim-dap-ui" }, types = true },
+        },
+      },
+      {
+        "smjonas/inc-rename.nvim",
+        config = true,
+      },
     },
   },
   {
@@ -142,6 +158,7 @@ return {
           -- code actions
           null_ls.builtins.code_actions.gitsigns,
           null_ls.builtins.code_actions.gomodifytags,
+          null_ls.builtins.code_actions.impl,
           null_ls.builtins.code_actions.refactoring,
           -- formatting
           null_ls.builtins.formatting.black,
@@ -157,10 +174,9 @@ return {
           }),
         },
         diagnostics_format = "#{m} (#{s})",
-        -- FIXME: this doesn't work. send PR to null-ls
-        -- diagnostic_config = {
-        --   virtual_text = false,
-        -- },
+        diagnostic_config = {
+          virtual_text = false,
+        },
         -- null-ls messes with formatexpr
         -- https://github.com/jose-elias-alvarez/null-ls.nvim/issues/1131#issuecomment-1432408485
         on_attach = function(_, bufnr)
@@ -183,7 +199,7 @@ return {
   {
     "lvimuser/lsp-inlayhints.nvim",
     ft = { "go" },
-    init = function()
+    config = function()
       require('lsp-inlayhints').setup()
       vim.api.nvim_create_augroup("LspAttach_inlayhints", {})
       vim.api.nvim_create_autocmd("LspAttach", {
@@ -197,6 +213,15 @@ return {
           local bufnr = args.buf
           local client = vim.lsp.get_client_by_id(args.data.client_id)
           require("lsp-inlayhints").on_attach(client, bufnr, false)
+          -- Testing semantic tokens for gopls
+          if client.name == 'gopls' and not client.server_capabilities.semanticTokensProvider then
+            local semantic = client.config.capabilities.textDocument.semanticTokens
+            client.server_capabilities.semanticTokensProvider = {
+              full = true,
+              legend = { tokenModifiers = semantic.tokenModifiers, tokenTypes = semantic.tokenTypes },
+              range = true,
+            }
+          end
         end,
       })
     end,

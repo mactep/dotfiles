@@ -8,7 +8,6 @@ return {
       "css",
       "go",
       "graphql",
-      "help",
       "html",
       "http",
       "javascript",
@@ -18,6 +17,7 @@ return {
       "python",
       "rust",
       "typescript",
+      "vimdoc",
     },
     opts = {
       -- A list of parser names, or "all" (the four listed parsers should always be installed)
@@ -28,7 +28,6 @@ return {
         "css",
         "go",
         "graphql",
-        "help",
         "html",
         "http",
         "javascript",
@@ -38,6 +37,7 @@ return {
         "python",
         "rust",
         "typescript",
+        "vimdoc",
       },
 
       -- Install parsers synchronously (only applied to `ensure_installed`)
@@ -81,18 +81,17 @@ return {
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
     end,
-    dependencies = {
-      {
-        "nvim-treesitter/playground",
-        cmd = {
-          "TSPlaygroundToggle",
-          "TSHighlightCapturesUnderCursor",
-          "TSCaptureUnderCursor",
-        },
-        keys = {
-          { "<F2>", "<cmd>TSHighlightCapturesUnderCursor<cr>", desc = "Show highlight group under cursor" },
-        },
-      },
+  },
+  {
+    "nvim-treesitter/playground",
+    cmd = {
+      "TSPlaygroundToggle",
+      "TSHighlightCapturesUnderCursor",
+      "TSCaptureUnderCursor",
     },
+    keys = {
+      { "<F2>", "<cmd>TSHighlightCapturesUnderCursor<cr>", desc = "Show highlight group under cursor" },
+    },
+    dependencies = { "nvim-treesitter" },
   },
 }

@@ -1,5 +1,5 @@
---- Drops the selected stash
----@param prompt_bufnr number: The prompt bufnr
+-- Drops the selected stash
+-- @param prompt_bufnr number: The prompt bufnr
 local git_drop_stash = function(prompt_bufnr)
   local action_state = require("telescope.actions.state")
   local utils = require("telescope.utils")
@@ -31,23 +31,10 @@ return {
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     "nvim-telescope/telescope-file-browser.nvim",
-    "nvim-telescope/telescope-ui-select.nvim",
+    -- "nvim-telescope/telescope-ui-select.nvim",
   },
   config = function()
     local fb_actions = require("telescope").extensions.file_browser.actions
-    vim.o.grepprg = 'rg --vimgrep'
-    vim.o.grepformat = [[ %f:%l:%c:%m, ]] .. vim.o.grepformat
-
-    local dropdown_configs = {
-      layout_strategy = "vertical",
-      layout_config = {
-        prompt_position = "bottom",
-        vertical = {
-          width = 0.8,
-          height = 100,
-        },
-      },
-    }
 
     require("telescope").setup({
       defaults = {
@@ -55,18 +42,24 @@ return {
           -- makes binary preview faster
           msg_bg_fillchar = " ",
         },
-        path_display = { "smart" },
-        layout_strategy = "vertical",
+        path_display = { "truncate" },
+        layout_strategy = "flex",
         layout_config = {
-          vertical = { height = 0.95, },
+          vertical = { height = 0.95, width = 0.95 },
+          horizontal = {
+            prompt_position = "top",
+            width = 0.95,
+          },
+          flex = { flip_columns = 120 },
         },
+        sorting_strategy = "ascending",
       },
       pickers = {
         buffers = {
           mappings = {
-            -- i = {
-            --   ["<c-d>"] = require("telescope.actions").delete_buffer,
-            -- },
+            i = {
+              ["<A-d>"] = require("telescope.actions").delete_buffer,
+            },
             n = {
               ["dd"] = require("telescope.actions").delete_buffer,
             },
@@ -75,10 +68,17 @@ return {
         git_stash = {
           mappings = {
             i = {
-              ["<c-d>"] = git_drop_stash,
+              ["<A-d>"] = git_drop_stash,
             },
             n = {
               ["dd"] = git_drop_stash,
+            },
+          },
+        },
+        git_branch = {
+          mappings = {
+            n = {
+              ["<A-a>"] = require("telescope.actions").git_create_branch,
             },
           },
         },
@@ -100,12 +100,9 @@ return {
               ["r"] = function(prompt_bufnr)
                 fb_actions.rename(prompt_bufnr)
 
-                -- TODO: validate if file has been renamed
-
-                local action_state = require "telescope.actions.state"
-                local file_path = action_state.get_selected_entry()[1]
-                local file_name = vim.split(file_path, "/")[#vim.split(file_path, "/")]
-                vim.cmd([[ :grep! ]] .. file_name)
+                local entry = require("telescope.actions.state").get_selected_entry()
+                local old_file = vim.fn.fnamemodify(entry.path, ":t")
+                vim.cmd("silent grep! " .. old_file .. " **")
               end,
             },
             i = {
@@ -114,14 +111,11 @@ return {
           },
         },
       },
-      ["ui-select"] = {
-        require("telescope.themes").get_dropdown(dropdown_configs),
-      },
     })
 
     require("telescope").load_extension("fzf")
     require("telescope").load_extension("file_browser")
-    require("telescope").load_extension("ui-select")
+    -- require("telescope").load_extension("ui-select")
   end,
   keys = {
     -- Find files
@@ -196,6 +190,7 @@ return {
         })
       end,
     },
+    -- Wiki articles
     {
       "<leader>fw",
       function()
@@ -213,19 +208,26 @@ return {
           cwd = "~/Dropbox/wiki",
           attach_mappings = function(_, map)
             map("i", "<CR>", function(prompt_bufnr)
-              -- filename is available at entry[1]
-              local entry = require("telescope.actions.state").get_selected_entry()
               require("telescope.actions").close(prompt_bufnr)
-              local filename = entry[1]
-              -- Insert filename in current cursor position
-              vim.cmd("normal i[" .. filename .. "](" .. filename .. ")")
-            end)
 
+              local notes_dir = vim.fn.expand("~/Dropbox/wiki")
+              local entry_path = require("telescope.actions.state").get_selected_entry()[1] -- relative to notes_dir
+              local entry_name = vim.fn.fnamemodify(entry_path, ":t:r")
+              local current_file_path = vim.fn.expand("%:p:h") -- absolute path
+              -- get relative path from current_file_path to entry_path
+              local relative_filename = vim.fn.trim(
+                  vim.fn.system("realpath --relative-to=" .. current_file_path .. " " .. notes_dir .. "/" .. entry_path)
+                )
+              -- Insert filename in current cursor position
+              local link = "[" .. entry_name .. "](" .. relative_filename .. ")"
+              vim.api.nvim_put({ link }, "c", true, true)
+            end)
             return true
           end,
         })
       end,
     },
+    -- Blog posts
     {
       "<leader>fB",
       function()
@@ -235,18 +237,21 @@ return {
         })
       end,
     },
+    -- File browser
     {
       "<C-n>",
       function()
         require("telescope").extensions.file_browser.file_browser()
       end,
     },
+    -- File browser relative to current file
     {
       "<A-n>",
       function()
         require("telescope").extensions.file_browser.file_browser({
           prompt_title = "Explore current file directory",
           path = "%:p:h",
+          select_buffer = true,
         })
       end,
     },

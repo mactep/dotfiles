@@ -20,11 +20,16 @@ end
 
 vim.api.nvim_create_augroup("TerminalSettings", {})
 vim.api.nvim_create_autocmd("TermOpen", {
+  group = "TerminalSettings",
+  pattern = "*",
   callback = function()
     vim.keymap.set(
       "n", "gf",
       go_to_file_from_terminal,
       { noremap = true, silent = true, buffer = true }
     )
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.cmd("startinsert")
   end,
 })

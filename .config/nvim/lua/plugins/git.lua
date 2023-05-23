@@ -4,19 +4,32 @@ return {
     "tpope/vim-fugitive", cmd = { "G", "Git" } },
   {
     "lewis6991/gitsigns.nvim",
-    lazy = false,
+    event = "BufRead",
     opts = {
       numhl = true,
       signcolumn = false,
     },
-    config = function(_, opts)
-      vim.fn.system("git rev-parse --is-inside-work-tree")
-      if vim.v.shell_error == 0 then
-        require("gitsigns").setup(opts)
-      end
-    end,
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
   },
+  {
+    'sindrets/diffview.nvim',
+    cmd = {
+      "DiffviewOpen",
+      "DiffviewFileHistory",
+    },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+  },
+  {
+    'TimUntersberger/neogit',
+    cmd = {
+      "Neogit",
+    },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+  }
 }
