@@ -150,7 +150,7 @@ return {
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
-    ft = { "markdown", "python", "vimwiki", "go", "graphql" },
+    ft = { "markdown", "python", "vimwiki", "go", "graphql", "lua" },
     config = function()
       local null_ls = require("null-ls")
       null_ls.setup({

@@ -32,6 +32,7 @@ return {
     lazy = false,
     opts = {
       input = {
+        insert_only = false, -- let me press esc to leave insert mode
         get_config = function(opts)
           if opts.prompt == "New Name: " then
             return {
@@ -47,26 +48,26 @@ return {
         end,
       },
       select = {
-        get_config = function(opts)
-          if opts.kind == "codeaction" then
-            opts = {
-              -- opens telescope at cursor position
-              telescope = require("telescope.themes").get_cursor(),
-            }
-            -- sort null-ls actions last
-            opts.telescope.sorter = require('telescope.sorters').Sorter:new {
-                scoring_function = function(_, _, line)
-                  if string.match(line, 'null-ls') then
-                    return 0
-                  else
-                    return 1
-                  end
-                end,
-              }
+        -- get_config = function(opts)
+        --   if opts.kind == "codeaction" then
+        --     opts = {
+        --       -- opens telescope at cursor position
+        --       telescope = require("telescope.themes").get_cursor(),
+        --     }
+        --     -- sort null-ls actions last
+        --     opts.telescope.sorter = require('telescope.sorters').Sorter:new {
+        --         scoring_function = function(_, _, line)
+        --           if string.match(line, 'null-ls') then
+        --             return 0
+        --           else
+        --             return 1
+        --           end
+        --         end,
+        --       }
 
-            return opts
-          end
-        end,
+        --     return opts
+        --   end
+        -- end,
       },
     },
   },

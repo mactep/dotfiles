@@ -55,6 +55,16 @@ return {
         sorting_strategy = "ascending",
       },
       pickers = {
+        find_files = {
+          mappings = {
+            i = {
+              ["<A-r>"] = fb_actions.rename,
+            },
+            n = {
+              ["r"] = fb_actions.rename,
+            },
+          },
+        },
         buffers = {
           mappings = {
             i = {
@@ -297,6 +307,21 @@ return {
         require("telescope.builtin").git_bcommits()
       end,
       { noremap = true, desc = "Git commits for current buffer" },
+    },
+    -- grep all TODOs in the current project
+    {
+      "<leader>ft",
+      function()
+        require("telescope.builtin").grep_string({
+          search = "TODO:",
+          prompt_title = "Grep TODOs",
+          cwd = vim.fn.expand("%:p:h"),
+          search_dirs = { vim.fn.expand("%:p:h") },
+          only_sort_text = true,
+          sorter = require("telescope.sorters").get_fuzzy_file(),
+        })
+      end,
+      { noremap = true, desc = "Grep TODOs" },
     },
   },
 }

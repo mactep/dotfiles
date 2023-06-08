@@ -94,12 +94,14 @@ return {
       vim.g.tmux_navigator_disable_when_zoomed = 1
 
       vim.cmd([[
-        noremap <silent> {Left-Mapping} :<C-U>TmuxNavigateLeft<cr>
-        noremap <silent> {Down-Mapping} :<C-U>TmuxNavigateDown<cr>
-        noremap <silent> {Up-Mapping} :<C-U>TmuxNavigateUp<cr>
-        noremap <silent> {Right-Mapping} :<C-U>TmuxNavigateRight<cr>
-        noremap <silent> {Previous-Mapping} :<C-U>TmuxNavigatePrevious<cr>
+        " noremap <silent> {Previous-Mapping} :<C-U>TmuxNavigatePrevious<cr>
       ]])
     end,
+    keys = {
+      { "<C-h>", "<cmd>TmuxNavigateLeft<cr>" },
+      { "<C-j>", "<cmd>TmuxNavigateDown<cr>" },
+      { "<C-k>", "<cmd>TmuxNavigateUp<cr>" },
+      { "<C-l>", "<cmd>TmuxNavigateRight<cr>" },
+    },
   },
 }
