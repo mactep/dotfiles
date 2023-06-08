@@ -4,3 +4,6 @@ fi
 if [ ! -f "$HOME/go/bin/revive" ]; then
     go install github.com/mgechev/revive@latest
 fi
+if [ ! -f "$HOME/go/bin/dlv" ]; then
+    go install github.com/go-delve/delve/cmd/dlv@latest
+fi
