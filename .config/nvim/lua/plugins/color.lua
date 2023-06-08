@@ -11,7 +11,13 @@ local colorschemes = {
       vim.cmd.colorscheme("gruvbox-material")
     end,
   },
-  -- { "gruvbox-community/gruvbox" },
+  {
+    'gruvbox-community/gruvbox',
+    config = function()
+      vim.g.gruvbox_invert_selection = 0
+      vim.cmd.colorscheme('gruvbox')
+    end
+  },
   {
     "AlexvZyl/nordic.nvim",
     config = function()
@@ -22,7 +28,7 @@ local colorschemes = {
           TelescopePreviewBorder = { fg = "#4C566A", },
           TelescopePromptBorder = { fg = "#4C566A", },
           TelescopeResultsBorder = { fg = "#4C566A", },
-          Visual = { bg = "#4C566A", },
+          Visual = { bg = "#363e4d", },
         },
         telescope = {
           -- Available styles: `classic`, `flat`.
@@ -56,6 +62,13 @@ local colorschemes = {
       }
 
       vim.cmd.colorscheme('fluoromachine')
+    end,
+  },
+  {
+    'glepnir/oceanic-material',
+    config = function()
+      vim.g.oceanic_material_style = 'oceanic'
+      vim.cmd.colorscheme('oceanic_material')
     end,
   },
 }
