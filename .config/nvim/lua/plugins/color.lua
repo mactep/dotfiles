@@ -12,65 +12,91 @@ local colorschemes = {
     end,
   },
   {
-    'gruvbox-community/gruvbox',
+    "gruvbox-community/gruvbox",
     config = function()
       vim.g.gruvbox_invert_selection = 0
-      vim.cmd.colorscheme('gruvbox')
+      vim.cmd.colorscheme("gruvbox")
     end
   },
   {
     "AlexvZyl/nordic.nvim",
-    config = function()
-      require("nordic").load({
-        bold_keywords = true,
-        override = {
-          FloatBorder = { fg = "#4C566A", },
-          TelescopePreviewBorder = { fg = "#4C566A", },
-          TelescopePromptBorder = { fg = "#4C566A", },
-          TelescopeResultsBorder = { fg = "#4C566A", },
-          Visual = { bg = "#363e4d", },
-        },
-        telescope = {
-          -- Available styles: `classic`, `flat`.
-          style = 'classic',
-        },
-      })
+    opts = {
+      bold_keywords = true,
+      override = {
+        FloatBorder = { fg = "#4C566A", },
+        TelescopePreviewBorder = { fg = "#4C566A", },
+        TelescopePromptBorder = { fg = "#4C566A", },
+        TelescopeResultsBorder = { fg = "#4C566A", },
+        Visual = { bg = "#363e4d", },
+      },
+      telescope = {
+        -- Available styles: `classic`, `flat`.
+        style = "classic",
+      },
+    },
+    config = function(_, opts)
+      require("nordic").load(opts)
     end,
   },
   {
     -- Duskfox for outrun aesthetic
     "EdenEast/nightfox.nvim",
     config = function()
-      local variants = { "duskfox", "nightfox", "nordfox" }
-      local variant = tonumber(vim.fn.trim(vim.fn.system("echo $((1 + RANDOM % " .. #variants .. "))")))
-      vim.cmd.colorscheme(variants[variant])
+      vim.cmd.colorscheme("duskfox")
     end
   },
   {
-    "sainnhe/everforest",
-    config = function()
-      vim.g.everforest_background = "medium"
-      vim.cmd.colorscheme("everforest")
-    end,
-  },
-  {
     "maxmx03/fluoromachine.nvim",
-    config = function()
-      require('fluoromachine').setup {
-        glow = true,
-        theme = 'fluoromachine',
-      }
-
-      vim.cmd.colorscheme('fluoromachine')
+    opts = {
+      glow = true,
+      theme = "fluoromachine",
+    },
+    config = function(_, opts)
+      require("fluoromachine").setup(opts)
+      vim.cmd.colorscheme("fluoromachine")
     end,
   },
   {
-    'glepnir/oceanic-material',
-    config = function()
-      vim.g.oceanic_material_style = 'oceanic'
-      vim.cmd.colorscheme('oceanic_material')
+    "catppuccin/nvim",
+    name = "catppuccin",
+    opts = {
+      flavour = "mocha", -- latte, frappe, macchiato, mocha
+      background = { -- :h background
+        light = "latte",
+        dark = "mocha",
+      },
+    },
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
+      vim.cmd.colorscheme("catppuccin")
     end,
   },
+  {
+    "rebelot/kanagawa.nvim",
+    config = function()
+      local variants = { "wave", "dragon" }
+      local variant = tonumber(vim.fn.trim(vim.fn.system("echo $((1 + RANDOM % " .. #variants .. "))")))
+
+      vim.cmd.colorscheme("kanagawa-" .. variants[variant])
+    end,
+  },
+  {
+    "tiagovla/tokyodark.nvim",
+    config = function(_, opts)
+      require("tokyodark").setup(opts)
+      vim.cmd.colorscheme("tokyodark")
+    end,
+  },
+  {
+    "folke/tokyonight.nvim",
+    opts = {
+      style = "moon", -- "storm", "night", "moon", "day"
+    },
+    config = function(_, opts)
+      require("tokyonight").setup(opts)
+      vim.cmd.colorscheme("tokyonight")
+    end,
+  }
 }
 
 local function light_variant()
@@ -78,7 +104,7 @@ local function light_variant()
   local output = vim.fn.system(background_detector_script)
 
   if output ~= 1 then
-    vim.o.background = 'light'
+    vim.o.background = "light"
   end
 end
 

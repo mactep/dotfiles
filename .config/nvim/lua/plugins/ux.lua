@@ -13,12 +13,21 @@ return {
       "zb",
     },
   },
-  { "tpope/vim-abolish",  cmd = { "S", "Subvert", "SubvertAll" } },
-  { "tpope/vim-surround", event = "InsertEnter", },
-  { "romainl/vim-cool",   lazy = false },
+  {
+    "tpope/vim-abolish",
+    cmd = { "S", "Subvert", "SubvertAll" },
+  },
+  {
+    "tpope/vim-surround",
+    event = "InsertEnter",
+  },
+  {
+    "romainl/vim-cool",
+    event = "VeryLazy",
+  },
   {
     "romainl/vim-qf",
-    lazy = false,
+    event = "VeryLazy",
     init = function()
       vim.keymap.set("n", "]q", "<Plug>(qf_qf_next)", { noremap = false })
       vim.keymap.set("n", "[q", "<Plug>(qf_qf_previous)", { noremap = false })
@@ -86,22 +95,27 @@ return {
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     config = true,
   },
-  {
-    "christoomey/vim-tmux-navigator",
-    lazy = false,
-    init = function()
-      vim.g.tmux_navigator_no_mappings = 1
-      vim.g.tmux_navigator_disable_when_zoomed = 1
+  -- {
+  --   "christoomey/vim-tmux-navigator",
+  --   event = "VeryLazy",
+  --   init = function()
+  --     vim.g.tmux_navigator_no_mappings = 1
+  --     vim.g.tmux_navigator_disable_when_zoomed = 1
 
-      vim.cmd([[
-        " noremap <silent> {Previous-Mapping} :<C-U>TmuxNavigatePrevious<cr>
-      ]])
-    end,
-    keys = {
-      { "<C-h>", "<cmd>TmuxNavigateLeft<cr>" },
-      { "<C-j>", "<cmd>TmuxNavigateDown<cr>" },
-      { "<C-k>", "<cmd>TmuxNavigateUp<cr>" },
-      { "<C-l>", "<cmd>TmuxNavigateRight<cr>" },
-    },
-  },
+  --     vim.cmd([[
+  --       " noremap <silent> {Previous-Mapping} :<C-U>TmuxNavigatePrevious<cr>
+  --     ]])
+  --   end,
+  --   keys = {
+  --     { "<C-h>", "<cmd>TmuxNavigateLeft<cr>" },
+  --     { "<C-j>", "<cmd>TmuxNavigateDown<cr>" },
+  --     { "<C-k>", "<cmd>TmuxNavigateUp<cr>" },
+  --     { "<C-l>", "<cmd>TmuxNavigateRight<cr>" },
+  --   },
+  -- },
+  -- {
+  --   "m4xshen/hardtime.nvim",
+  --   event = "VeryLazy",
+  --   opts = {}
+  -- },
 }

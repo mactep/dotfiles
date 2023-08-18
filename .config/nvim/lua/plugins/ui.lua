@@ -25,50 +25,50 @@ return {
   },
   {
     "kyazdani42/nvim-web-devicons",
-    lazy = false,
+    event = "VeryLazy",
   },
-  {
-    "stevearc/dressing.nvim",
-    lazy = false,
-    opts = {
-      input = {
-        insert_only = false, -- let me press esc to leave insert mode
-        get_config = function(opts)
-          if opts.prompt == "New Name: " then
-            return {
-              start_in_insert = false,
-            }
-          elseif opts.completion == "file" then
-            -- better position
-            return {
-              relative = "editor",
-              start_in_insert = false,
-            }
-          end
-        end,
-      },
-      select = {
-        -- get_config = function(opts)
-        --   if opts.kind == "codeaction" then
-        --     opts = {
-        --       -- opens telescope at cursor position
-        --       telescope = require("telescope.themes").get_cursor(),
-        --     }
-        --     -- sort null-ls actions last
-        --     opts.telescope.sorter = require('telescope.sorters').Sorter:new {
-        --         scoring_function = function(_, _, line)
-        --           if string.match(line, 'null-ls') then
-        --             return 0
-        --           else
-        --             return 1
-        --           end
-        --         end,
-        --       }
+  -- {
+  --   "stevearc/dressing.nvim",
+  --   event = "VeryLazy",
+  --   opts = {
+  --     input = {
+  --       insert_only = false, -- let me press esc to leave insert mode
+  --       get_config = function(opts)
+  --         if opts.prompt == "New Name: " then
+  --           return {
+  --             start_in_insert = false,
+  --           }
+  --         elseif opts.completion == "file" then
+  --           -- better position
+  --           return {
+  --             relative = "editor",
+  --             start_in_insert = false,
+  --           }
+  --         end
+  --       end,
+  --     },
+  --     select = {
+  --       get_config = function(opts)
+  --         if opts.kind == "codeaction" then
+  --           opts = {
+  --             -- opens telescope at cursor position
+  --             telescope = require("telescope.themes").get_cursor(),
+  --           }
+  --           -- -- sort null-ls actions last
+  --           -- opts.telescope.sorter = require('telescope.sorters').Sorter:new {
+  --           --     scoring_function = function(_, _, line)
+  --           --       if string.match(line, 'null-ls') then
+  --           --         return 0
+  --           --       else
+  --           --         return 1
+  --           --       end
+  --           --     end,
+  --           --   }
 
-        --     return opts
-        --   end
-        -- end,
-      },
-    },
-  },
+  --           -- return opts
+  --         end
+  --       end,
+  --     },
+  --   },
+  -- },
 }

@@ -64,7 +64,7 @@ nnoremap <C-l> <C-w>l
 nnoremap <silent><A-l> <cmd>bn<CR>
 nnoremap <silent><A-h> <cmd>bp<CR>
 nnoremap <silent><A-d> <cmd>Bd<CR>
-nnoremap <silent><S-A-d> <cmd>bd<CR>
+nnoremap <silent><S-A-d> <cmd>bw<CR>
 nnoremap <silent>]b <cmd>bn<CR>
 nnoremap <silent>[b <cmd>bp<CR>
 
@@ -122,6 +122,10 @@ nnoremap <M-p> <C-r><C-o>"
 " copy to system clipboard
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
+
+" make the cursor stay in place after yanking
+" nnoremap y ygv<Esc>
+" vnoremap y may`a
 
 " replace the word under the cursor with the previous search
 " nnoremap <leader>s :%s/<C-r><C-w>/<C-r><C-r>//gc<left><left><left>

@@ -41,6 +41,7 @@ return {
         preview = {
           -- makes binary preview faster
           msg_bg_fillchar = " ",
+          timeout = 50,
         },
         path_display = { "truncate" },
         layout_strategy = "flex",
@@ -107,13 +108,7 @@ return {
               ["a"] = fb_actions.create,
               ["<Alt-a>"] = fb_actions.create_from_prompt,
               ["J"] = fb_actions.create_from_prompt,
-              ["r"] = function(prompt_bufnr)
-                fb_actions.rename(prompt_bufnr)
-
-                local entry = require("telescope.actions.state").get_selected_entry()
-                local old_file = vim.fn.fnamemodify(entry.path, ":t")
-                vim.cmd("silent grep! " .. old_file .. " **")
-              end,
+              ["r"] = fb_actions.rename,
             },
             i = {
               ["<Alt-a>"] = fb_actions.create_from_prompt,
@@ -133,6 +128,13 @@ return {
       "<leader>ff",
       function()
         require("telescope.builtin").find_files()
+      end,
+      { noremap = true, desc = "Find files" },
+    },
+    {
+      "<leader>fF",
+      function()
+        require("telescope.builtin").find_files({ hidden = true })
       end,
       { noremap = true, desc = "Find files" },
     },

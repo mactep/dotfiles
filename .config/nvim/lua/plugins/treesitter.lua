@@ -1,7 +1,6 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    cmd = { "TSInstall" },
     ft = {
       "bash",
       "c",
@@ -14,6 +13,7 @@ return {
       "json",
       "latex",
       "lua",
+      "proto",
       "python",
       "rust",
       "typescript",
@@ -34,6 +34,7 @@ return {
         "json",
         "latex",
         "lua",
+        "proto",
         "python",
         "rust",
         "typescript",
@@ -53,10 +54,57 @@ return {
         -- Instead of true it can also be a list of languages
         additional_vim_regex_highlighting = false,
       },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          -- init_selection = "gnn",
+          -- node_incremental = "grn",
+          init_selection = "<CR>",
+          node_incremental = "<CR>",
+          scope_incremental = "grc",
+          node_decremental = "grm",
+        },
+      },
+      textobjects = {
+        select = {
+          enable = true,
+
+          -- Automatically jump forward to textobjects, similar to targets.vim
+          lookahead = true,
+
+          keymaps = {
+            ["af"] = { query = "@function.outer", desc = "Select outer part of a function region" },
+            ["if"] = { query = "@function.inner", desc = "Select inner part of a function region" },
+            ["ac"] = { query = "@class.outer", desc = "Select outer part of a class region" },
+            ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+          },
+          -- You can choose the select mode (default is charwise 'v')
+          selection_modes = {
+            ["@parameter.outer"] = "v", -- charwise
+            ["@function.outer"] = "V",  -- linewise
+            ["@class.outer"] = "<c-v>", -- blockwise
+          },
+          -- If you set this to `true` (default is `false`) then any textobject is
+          -- extended to include preceding or succeeding whitespace. Succeeding
+          -- whitespace has priority in order to act similarly to eg the built-in
+          -- `ap`.
+          include_surrounding_whitespace = true,
+        },
+
+        lsp_interop = {
+          enable = true,
+          border = "none",
+          floating_preview_opts = {},
+          peek_definition_code = {
+            ["<leader>df"] = "@function.outer",
+            ["<leader>dF"] = "@class.outer",
+          },
+        },
+      },
       playground = {
         enable = true,
         disable = {},
-        updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+        updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
         persist_queries = false, -- Whether the query persists across vim sessions
         keybindings = {
           toggle_query_editor = "o",
@@ -94,4 +142,26 @@ return {
     },
     dependencies = { "nvim-treesitter" },
   },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    ft = {
+      "bash",
+      "c",
+      "css",
+      "go",
+      "graphql",
+      "html",
+      "http",
+      "javascript",
+      "json",
+      "latex",
+      "lua",
+      "proto",
+      "python",
+      "rust",
+      "typescript",
+      "vimdoc",
+    },
+    dependencies = { "nvim-treesitter" },
+  }
 }

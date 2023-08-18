@@ -51,23 +51,53 @@ return {
       ]])
     end,
   },
-  {
-    "nvim-neorg/neorg",
-    build = ":Neorg sync-parsers",
-    cmd = "Neorg",
-    opts = {
-      load = {
-        ["core.defaults"] = {}, -- Loads default behaviour
-        ["core.norg.concealer"] = {}, -- Adds pretty icons to your documents
-        ["core.norg.dirman"] = { -- Manages Neorg workspaces
-          config = {
-            workspaces = {
-              notes = "~/Dropbox/neorg", -- TODO: merge with Vimwiki
-            },
-          },
-        },
-      },
-    },
-    dependencies = { { "nvim-lua/plenary.nvim" } },
-  }
+  -- {
+  --   "nvim-neorg/neorg",
+  --   build = ":Neorg sync-parsers",
+  --   cmd = "Neorg",
+  --   opts = {
+  --     load = {
+  --       ["core.defaults"] = {}, -- Loads default behaviour
+  --       ["core.norg.concealer"] = {}, -- Adds pretty icons to your documents
+  --       ["core.norg.dirman"] = { -- Manages Neorg workspaces
+  --         config = {
+  --           workspaces = {
+  --             notes = "~/Dropbox/neorg", -- TODO: merge with Vimwiki
+  --           },
+  --         },
+  --       },
+  --     },
+  --   },
+  --   dependencies = { { "nvim-lua/plenary.nvim" } },
+  -- }
+  -- {
+  --   "serenevoid/kiwi.nvim",
+  --   dependencies = { "nvim-lua/plenary.nvim", },
+  --   config = function()
+  --     require("kiwi").setup({
+  --       {
+  --         name = "work",
+  --         path = "/home/mactep/Documents/work-wiki"
+  --       },
+  --       {
+  --         name = "personal",
+  --         path = "/home/mactep/Documents/personal-wiki"
+  --       }
+  --     })
+  --   end,
+  --   keys = {
+  --     {
+  --       "<leader>ww",
+  --       function() require("kiwi").open_wiki_index() end,
+  --     },
+  --     {
+  --       "<leader>wd",
+  --       function() require("kiwi").open_diary_index() end,
+  --     },
+  --     {
+  --       "<leader>wn",
+  --       function() require("kiwi").open_diary_new() end,
+  --     }
+  --   },
+  -- },
 }
