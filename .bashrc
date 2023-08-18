@@ -25,3 +25,11 @@ if [ -d ~/.bashrc.d ]; then
 fi
 
 unset rc
+
+# pnpm
+export PNPM_HOME="/home/mactep/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
