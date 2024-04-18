@@ -8,7 +8,7 @@
   imports =
     [
       # Include the results of the hardware scan.
-      ./hardware-configuration-nvme.nix
+      ./hardware-configuration.nix
       ./locale.nix
       ./nvidia.nix
       ./interception-tools.nix
@@ -49,11 +49,14 @@
     description = user.name;
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [ ];
+    shell = pkgs.${user.shell};
   };
 
-  # shell config
-  users.users.${user.name}.shell = pkgs.fish;
-  programs.fish.enable = true;
+  programs.${user.shell} = (
+    if pkgs.${user.shell} != "bash" then {
+      enable = true;
+    } else {}
+  );
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
