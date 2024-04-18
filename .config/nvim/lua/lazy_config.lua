@@ -26,4 +26,19 @@ if not present then
   return
 end
 
-lazy.setup("plugins", opts)
+-- setting the config one by one so it's easier to debug
+lazy.setup({
+  require("plugins.color"),
+  require("plugins.completion"),
+  require("plugins.dap"),
+  require("plugins.git"),
+  require("plugins.lsp"),
+  require("plugins.notes"),
+  require("plugins.refactoring"),
+  require("plugins.telescope"),
+  require("plugins.test"),
+  require("plugins.treesitter"),
+  require("plugins.ui"),
+  require("plugins.util"),
+  require("plugins.ux"),
+}, opts)

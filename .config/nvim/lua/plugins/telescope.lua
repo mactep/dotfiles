@@ -1,37 +1,15 @@
--- Drops the selected stash
--- @param prompt_bufnr number: The prompt bufnr
-local git_drop_stash = function(prompt_bufnr)
-  local action_state = require("telescope.actions.state")
-  local utils = require("telescope.utils")
-  local actions = require("telescope.actions")
-
-  local selection = action_state.get_selected_entry()
-  if selection == nil then
-    utils.__warn_no_selection "actions.git_drop_stash"
-    return
-  end
-  actions.close(prompt_bufnr)
-  local _, ret, stderr = utils.get_os_command_output { "git", "stash", "drop", selection.value }
-  if ret == 0 then
-    utils.notify("actions.git_drop_stash", {
-      msg = string.format("dropped: '%s' ", selection.value),
-      level = "INFO",
-    })
-  else
-    utils.notify("actions.git_drop_stash", {
-      msg = string.format("Error when droping: %s. Git returned: '%s'", selection.value, table.concat(stderr, " ")),
-      level = "ERROR",
-    })
-  end
-end
+local custom_actions = require("plugins.telescope.custom_actions")
 
 return {
   "nvim-telescope/telescope.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make', },
     "nvim-telescope/telescope-file-browser.nvim",
-    -- "nvim-telescope/telescope-ui-select.nvim",
+    "nvim-telescope/telescope-live-grep-args.nvim",
+    "nvim-telescope/telescope-ui-select.nvim",
+    "nvim-treesitter/nvim-treesitter",
+    "nvim-tree/nvim-web-devicons",
   },
   config = function()
     local fb_actions = require("telescope").extensions.file_browser.actions
@@ -57,12 +35,15 @@ return {
       },
       pickers = {
         find_files = {
+          find_command = { "rg", "--files", "--hidden", "--glob", "!.git/*" },
           mappings = {
             i = {
               ["<A-r>"] = fb_actions.rename,
             },
             n = {
               ["r"] = fb_actions.rename,
+              ["y"] = custom_actions.find_files_copy,
+              ["d"] = fb_actions.remove,
             },
           },
         },
@@ -79,10 +60,10 @@ return {
         git_stash = {
           mappings = {
             i = {
-              ["<A-d>"] = git_drop_stash,
+              ["<A-d>"] = custom_actions.git_drop_stash,
             },
             n = {
-              ["dd"] = git_drop_stash,
+              ["dd"] = custom_actions.git_drop_stash,
             },
           },
         },
@@ -90,6 +71,14 @@ return {
           mappings = {
             n = {
               ["<A-a>"] = require("telescope.actions").git_create_branch,
+            },
+          },
+        },
+        git_commits = {
+          mappings = {
+            i = {
+              ["<C-s>"] = require("telescope.actions").cycle_previewers_next,
+              ["<C-a>"] = require("telescope.actions").cycle_previewers_prev,
             },
           },
         },
@@ -109,9 +98,21 @@ return {
               ["<Alt-a>"] = fb_actions.create_from_prompt,
               ["J"] = fb_actions.create_from_prompt,
               ["r"] = fb_actions.rename,
+              ["<C-f>"] = custom_actions.find_inside_dir_under_cursor,
+              ["<C-g>"] = custom_actions.grep_dir_under_cursor,
             },
             i = {
               ["<Alt-a>"] = fb_actions.create_from_prompt,
+              ["<C-f>"] = custom_actions.find_inside_dir_under_cursor,
+              ["<C-g>"] = custom_actions.grep_dir_under_cursor,
+            },
+          },
+        },
+        live_grep_args = {
+          mappings = { -- extend mappings
+            i = {
+              ["<C-k>"] = require("telescope-live-grep-args.actions").quote_prompt(),
+              ["<C-i>"] = require("telescope-live-grep-args.actions").quote_prompt({ postfix = " --iglob " }),
             },
           },
         },
@@ -120,7 +121,8 @@ return {
 
     require("telescope").load_extension("fzf")
     require("telescope").load_extension("file_browser")
-    -- require("telescope").load_extension("ui-select")
+    require("telescope").load_extension("live_grep_args")
+    require("telescope").load_extension("ui-select")
   end,
   keys = {
     -- Find files
@@ -148,7 +150,7 @@ return {
     {
       "<leader>fg",
       function()
-        require("telescope.builtin").live_grep()
+        require("telescope").extensions.live_grep_args.live_grep_args()
       end,
       { noremap = true, desc = "Grep files" },
     },
@@ -172,6 +174,15 @@ return {
         require("telescope.builtin").buffers()
       end,
       { noremap = true, desc = "Find buffers" },
+    },
+    {
+      "<leader>fr",
+      function()
+        require("telescope.builtin").resume({
+          initial_mode = "normal",
+        })
+      end,
+      { noremap = true, desc = "Resume last picker" },
     },
     -- Neovim config
     {
@@ -225,11 +236,11 @@ return {
               local notes_dir = vim.fn.expand("~/Dropbox/wiki")
               local entry_path = require("telescope.actions.state").get_selected_entry()[1] -- relative to notes_dir
               local entry_name = vim.fn.fnamemodify(entry_path, ":t:r")
-              local current_file_path = vim.fn.expand("%:p:h") -- absolute path
+              local current_file_path = vim.fn.expand("%:p:h")                              -- absolute path
               -- get relative path from current_file_path to entry_path
               local relative_filename = vim.fn.trim(
-                  vim.fn.system("realpath --relative-to=" .. current_file_path .. " " .. notes_dir .. "/" .. entry_path)
-                )
+                vim.fn.system("realpath --relative-to=" .. current_file_path .. " " .. notes_dir .. "/" .. entry_path)
+              )
               -- Insert filename in current cursor position
               local link = "[" .. entry_name .. "](" .. relative_filename .. ")"
               vim.api.nvim_put({ link }, "c", true, true)
@@ -281,13 +292,6 @@ return {
         require("telescope.builtin").git_branches()
       end,
       { noremap = true, desc = "Git branches" },
-    },
-    {
-      "<leader>gs",
-      function()
-        require("telescope.builtin").git_status()
-      end,
-      { noremap = true, desc = "Git status" },
     },
     {
       "<leader>gS",

@@ -5,17 +5,15 @@ local colorschemes = {
     "sainnhe/gruvbox-material",
     config = function()
       vim.g.gruvbox_material_palette = "mix"
-      -- vim.g.gruvbox_sign_column = "bg0"
-      -- vim.g.gruvbox_material_sign_column_background = "none"
       vim.g.gruvbox_invert_selection = 0
       vim.cmd.colorscheme("gruvbox-material")
     end,
   },
   {
-    "gruvbox-community/gruvbox",
+    "ellisonleao/gruvbox.nvim",
     config = function()
-      vim.g.gruvbox_invert_selection = 0
       vim.cmd.colorscheme("gruvbox")
+      vim.cmd([[ hi! link Folded CursorLineFold ]])
     end
   },
   {
@@ -33,6 +31,7 @@ local colorschemes = {
         -- Available styles: `classic`, `flat`.
         style = "classic",
       },
+      theme = "onedark",
     },
     config = function(_, opts)
       require("nordic").load(opts)
@@ -61,7 +60,7 @@ local colorschemes = {
     name = "catppuccin",
     opts = {
       flavour = "mocha", -- latte, frappe, macchiato, mocha
-      background = { -- :h background
+      background = {     -- :h background
         light = "latte",
         dark = "mocha",
       },
@@ -81,13 +80,6 @@ local colorschemes = {
     end,
   },
   {
-    "tiagovla/tokyodark.nvim",
-    config = function(_, opts)
-      require("tokyodark").setup(opts)
-      vim.cmd.colorscheme("tokyodark")
-    end,
-  },
-  {
     "folke/tokyonight.nvim",
     opts = {
       style = "moon", -- "storm", "night", "moon", "day"
@@ -95,6 +87,21 @@ local colorschemes = {
     config = function(_, opts)
       require("tokyonight").setup(opts)
       vim.cmd.colorscheme("tokyonight")
+    end,
+  },
+  {
+    "talha-akram/noctis.nvim",
+    config = function()
+      local variants = { "azureus", "bordo", "minimus", "uva", "viola", }
+      local variant = tonumber(vim.fn.trim(vim.fn.system("echo $((1 + RANDOM % " .. #variants .. "))")))
+
+      vim.cmd.colorscheme("noctis_" .. variants[variant])
+    end,
+  },
+  {
+    "projekt0n/caret.nvim",
+    config = function()
+      vim.cmd.colorscheme("caret")
     end,
   }
 }
@@ -110,6 +117,8 @@ end
 
 -- using this to avoid a compiled random number
 local theme = tonumber(vim.fn.trim(vim.fn.system("echo $((1 + RANDOM % " .. #colorschemes .. "))")))
+
+theme = 6
 
 colorschemes[theme].lazy = false
 colorschemes[theme].priority = 1000

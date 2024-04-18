@@ -1,7 +1,5 @@
-local on_attach = require("plugins.lsp.on_attach")
-
 return {
-  on_attach = on_attach,
+  cmd = { "gopls" },
   settings = {
     gopls = {
       gofumpt = true,

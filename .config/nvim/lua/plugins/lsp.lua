@@ -1,57 +1,32 @@
-local keymaps = require("plugins.lsp.keymaps")
-local mason = require("plugins.lsp.mason")
+local global_keymaps = require("plugins.lsp.global_keymaps")
+local lsp_attach = require("plugins.lsp.lsp_attach")
+local ensure_installed = require("plugins.lsp.ensure_installed")
+local lspconfig = require("plugins.lsp.lspconfig")
+local diagnostics = require("plugins.lsp.diagnostics")
+local hover = require("plugins.lsp.hover")
 
 return {
   {
     "neovim/nvim-lspconfig",
-    event = "VeryLazy",
+    event = "BufReadPre",
     config = function()
-      keymaps()
-      mason()
-
-      vim.diagnostic.config({
-        virtual_text = false,
-        float = {
-          border = "rounded",
-        },
-      })
-
-      -- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+      ensure_installed()
+      lspconfig()
+      global_keymaps()
+      lsp_attach()
+      diagnostics()
+      hover()
     end,
     dependencies = {
-      { "williamboman/mason.nvim", config = true, build = ":MasonUpdate" },
-      "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/cmp-nvim-lsp",
       -- since it needs to be configure before lspconfig
+      -- "hrsh7th/cmp-nvim-lsp",
+      -- dependencies = { "hrsh7th/nvim-cmp" },
       {
         "folke/neodev.nvim",
         opts = {
           library = { plugins = { "nvim-dap-ui" }, types = true },
         },
       },
-      {
-        "smjonas/inc-rename.nvim",
-        config = true,
-      },
-    },
-  },
-  {
-    "jose-elias-alvarez/null-ls.nvim",
-    event = "VeryLazy",
-    ft = { "go", },
-    config = function()
-      local null_ls = require("null-ls")
-      null_ls.setup({
-        sources = {
-          null_ls.builtins.code_actions.gitsigns,
-          null_ls.builtins.code_actions.refactoring,
-        },
-      })
-    end,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "neovim/nvim-lspconfig", -- to make sure it's loaded before null-ls
-      "ThePrimeagen/refactoring.nvim",
     },
   },
 }

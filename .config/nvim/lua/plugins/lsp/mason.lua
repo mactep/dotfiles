@@ -1,13 +1,23 @@
-local on_attach = require("plugins.lsp.on_attach")
-
 return function()
-  local mason_lspconfig = require("mason-lspconfig")
-  local lspconfig = require("lspconfig")
+  require("mason").setup()
 
   local capabilities = require("cmp_nvim_lsp").default_capabilities()
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-  mason_lspconfig.setup({
+  local opts = { capabilities = capabilities }
+
+  local custom_config = { "gopls", "lua_ls", "texlab", "efm", "tsserver" }
+  local handlers = {
+    function(server_name)
+      require("lspconfig")[server_name].setup(opts)
+    end,
+  }
+  for _, server_name in ipairs(custom_config) do
+    handlers[server_name] = function()
+      require("lspconfig")[server_name].setup(require("plugins.lsp." .. server_name))
+    end
+  end
+
+  require("mason-lspconfig").setup({
     ensure_installed = {
       "lua_ls",
       "tsserver",
@@ -15,21 +25,6 @@ return function()
       "texlab",
       "efm",
     },
+    handlers = handlers,
   })
-
-  local opts = { on_attach = on_attach, capabilities = capabilities }
-
-  local custom_config = { "gopls", "lua_ls", "texlab", "efm" }
-  local handlers = {
-    function(server_name)
-      lspconfig[server_name].setup(opts)
-    end,
-  }
-  for _, server_name in ipairs(custom_config) do
-    handlers[server_name] = function()
-        lspconfig[server_name].setup(require("plugins.lsp." .. server_name))
-      end
-  end
-
-  mason_lspconfig.setup_handlers(handlers)
 end

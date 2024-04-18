@@ -1,48 +1,47 @@
+local file_types = {
+  "bash",
+  "c",
+  "css",
+  "go",
+  "graphql",
+  "html",
+  "http",
+  "javascript",
+  "json",
+  "latex",
+  "lua",
+  "markdown",
+  "proto",
+  "python",
+  "query",
+  "rust",
+  "typescript",
+  "vimdoc",
+  "yaml",
+}
+
+local parsers = vim.tbl_extend("force", file_types, {
+  "markdown_inline",
+})
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    ft = {
-      "bash",
-      "c",
-      "css",
-      "go",
-      "graphql",
-      "html",
-      "http",
-      "javascript",
-      "json",
-      "latex",
-      "lua",
-      "proto",
-      "python",
-      "rust",
-      "typescript",
-      "vimdoc",
+    ft = file_types,
+    cmd = {
+      "TSPlaygroundToggle",
     },
     opts = {
       -- A list of parser names, or "all" (the four listed parsers should always be installed)
-      ensure_installed = {
-        "bash",
-        "c",
-        "comment",
-        "css",
-        "go",
-        "graphql",
-        "html",
-        "http",
-        "javascript",
-        "json",
-        "latex",
-        "lua",
-        "proto",
-        "python",
-        "rust",
-        "typescript",
-        "vimdoc",
-      },
+      ensure_installed = parsers,
 
       -- Install parsers synchronously (only applied to `ensure_installed`)
       sync_install = false,
+
+      indent = {
+        enable = true,
+        disable = { "python" }, -- there are some issues going on https://github.com/nvim-treesitter/nvim-treesitter/issues/1136
+      },
 
       highlight = {
         -- `false` will disable the whole extension
@@ -77,10 +76,21 @@ return {
             ["if"] = { query = "@function.inner", desc = "Select inner part of a function region" },
             ["ac"] = { query = "@class.outer", desc = "Select outer part of a class region" },
             ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+            ["al"] = { query = "@loop.outer", desc = "Select outer part of a loop region" },
+            ["il"] = { query = "@loop.inner", desc = "Select inner part of a loop region" },
+            ["ii"] = { query = "@conditional.inner", desc = "Select inner part of a conditional region" },
+            ["ai"] = { query = "@conditional.outer", desc = "Select outer part of a conditional region" },
+            ["aB"] = { query = "@block.outer", desc = "Select outer part of a block region" },
+            ["iB"] = { query = "@block.inner", desc = "Select inner part of a block region" },
+            ["aC"] = { query = "@comment.outer", desc = "Select outer part of a comment region" },
+            ["iC"] = { query = "@comment.inner", desc = "Select inner part of a comment region" },
+            ["a,"] = { query = "@parameter.outer", desc = "Select inner part of a parameter region" },
+            ["i,"] = { query = "@parameter.inner", desc = "Select inner part of a parameter region" },
           },
           -- You can choose the select mode (default is charwise 'v')
           selection_modes = {
             ["@parameter.outer"] = "v", -- charwise
+            ["@function.inner"] = "V",  -- linewise
             ["@function.outer"] = "V",  -- linewise
             ["@class.outer"] = "<c-v>", -- blockwise
           },
@@ -101,67 +111,22 @@ return {
           },
         },
       },
-      playground = {
-        enable = true,
-        disable = {},
-        updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
-        persist_queries = false, -- Whether the query persists across vim sessions
-        keybindings = {
-          toggle_query_editor = "o",
-          toggle_hl_groups = "i",
-          toggle_injected_languages = "t",
-          toggle_anonymous_nodes = "a",
-          toggle_language_display = "I",
-          focus_language = "f",
-          unfocus_language = "F",
-          update = "R",
-          goto_node = "<cr>",
-          show_help = "?",
-        },
-      },
-      query_linter = {
-        enable = true,
-        use_virtual_text = true,
-        lint_events = { "BufWrite", "CursorHold" },
-      },
     },
     build = ":TSUpdate",
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
+
+      -- use Treesitter to fold
+      vim.o.foldmethod = "expr"
+      vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+      vim.o.foldtext = ""
+      vim.o.fillchars = "fold: "
+      vim.o.foldlevel = 2
     end,
   },
   {
-    "nvim-treesitter/playground",
-    cmd = {
-      "TSPlaygroundToggle",
-      "TSHighlightCapturesUnderCursor",
-      "TSCaptureUnderCursor",
-    },
-    keys = {
-      { "<F2>", "<cmd>TSHighlightCapturesUnderCursor<cr>", desc = "Show highlight group under cursor" },
-    },
-    dependencies = { "nvim-treesitter" },
-  },
-  {
     "nvim-treesitter/nvim-treesitter-textobjects",
-    ft = {
-      "bash",
-      "c",
-      "css",
-      "go",
-      "graphql",
-      "html",
-      "http",
-      "javascript",
-      "json",
-      "latex",
-      "lua",
-      "proto",
-      "python",
-      "rust",
-      "typescript",
-      "vimdoc",
-    },
+    ft = file_types,
     dependencies = { "nvim-treesitter" },
   }
 }

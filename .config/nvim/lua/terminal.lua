@@ -18,9 +18,8 @@ local function go_to_file_from_terminal()
   vim.cmd([[ edit ]] .. filename)
 end
 
-vim.api.nvim_create_augroup("TerminalSettings", {})
 vim.api.nvim_create_autocmd("TermOpen", {
-  group = "TerminalSettings",
+  group = vim.api.nvim_create_augroup("TerminalSettings", {}),
   pattern = "*",
   callback = function()
     vim.keymap.set(
@@ -30,6 +29,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
     )
     vim.opt_local.number = false
     vim.opt_local.relativenumber = false
+    vim.opt_local.foldmethod = "manual"
     vim.cmd("startinsert")
   end,
 })

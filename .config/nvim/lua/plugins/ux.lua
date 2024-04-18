@@ -1,17 +1,7 @@
-Lazygit = nil
-
 return {
   {
-    "karb94/neoscroll.nvim",
-    keys = {
-      "<C-u>",
-      "<C-d>",
-      "<C-b>",
-      "<C-f>",
-      "zt",
-      "zz",
-      "zb",
-    },
+    "wellle/targets.vim",
+    event = "BufRead",
   },
   {
     "tpope/vim-abolish",
@@ -22,12 +12,8 @@ return {
     event = "InsertEnter",
   },
   {
-    "romainl/vim-cool",
-    event = "VeryLazy",
-  },
-  {
     "romainl/vim-qf",
-    event = "VeryLazy",
+    event = "BufRead",
     init = function()
       vim.keymap.set("n", "]q", "<Plug>(qf_qf_next)", { noremap = false })
       vim.keymap.set("n", "[q", "<Plug>(qf_qf_previous)", { noremap = false })
@@ -47,75 +33,62 @@ return {
           vim.keymap.set("n", "}", "<Plug>(qf_next_file)", { buffer = true })
         end,
       })
-    end
+    end,
   },
   {
     "akinsho/toggleterm.nvim",
+    enabled = false,
     cmd = { "ToggleTerm" },
     keys = {
       { -- this is sketchy and only works on kitty outside tmux
         "<C-`>",
-        function() require('toggleterm').toggle(nil, nil, nil, 'float') end,
+        function() require("toggleterm").toggle(nil, nil, nil, "float") end,
         desc = "Toggle terminal",
         mode = { "n", "t", "i" },
       },
       {
         "<space>t",
-        function() require('toggleterm').toggle(nil, nil, nil, 'float') end,
+        function() require("toggleterm").toggle(nil, nil, nil, "float") end,
         desc = "Toggle terminal",
       },
       {
-        "<leader>G",
-        function() Lazygit:toggle() end,
+        "<leader>lg",
+        function() require("toggleterm").Lazygit:toggle() end,
         { noremap = true, silent = true }
       },
     },
     config = function()
-      local Terminal = require('toggleterm.terminal').Terminal
-      Lazygit = Terminal:new({
-          cmd = "lazygit",
-          hidden = true,
-          direction = "float",
-          on_open = function()
-            vim.keymap.del("t", "<Esc>")
-          end,
-          on_close = function()
-            vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
-          end,
-        })
+      require("toggleterm").setup({
+        on_open = function()
+          -- treesitter folding lags the terminal
+          vim.opt_local.foldmethod = "manual"
+        end,
+      })
+      require("toggleterm").Lazygit = require("toggleterm.terminal").Terminal:new({
+        cmd = "lazygit",
+        hidden = true,
+        direction = "float",
+        on_open = function()
+          vim.keymap.del("t", "<Esc>")
+        end,
+        on_close = function()
+          vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
+        end,
+      })
     end,
   },
   {
-    'Wansmer/treesj',
+    "Wansmer/treesj",
     keys = {
       -- { '<leader>st', function() require('treesj').toggle() end },
-      { 'tj', function() require('treesj').join() end },
-      { 'ts', function() require('treesj').split() end },
+      { "tj", function() require("treesj").join() end },
+      { "ts", function() require("treesj").split() end },
     },
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = true,
   },
-  -- {
-  --   "christoomey/vim-tmux-navigator",
-  --   event = "VeryLazy",
-  --   init = function()
-  --     vim.g.tmux_navigator_no_mappings = 1
-  --     vim.g.tmux_navigator_disable_when_zoomed = 1
-
-  --     vim.cmd([[
-  --       " noremap <silent> {Previous-Mapping} :<C-U>TmuxNavigatePrevious<cr>
-  --     ]])
-  --   end,
-  --   keys = {
-  --     { "<C-h>", "<cmd>TmuxNavigateLeft<cr>" },
-  --     { "<C-j>", "<cmd>TmuxNavigateDown<cr>" },
-  --     { "<C-k>", "<cmd>TmuxNavigateUp<cr>" },
-  --     { "<C-l>", "<cmd>TmuxNavigateRight<cr>" },
-  --   },
-  -- },
-  -- {
-  --   "m4xshen/hardtime.nvim",
-  --   event = "VeryLazy",
-  --   opts = {}
-  -- },
+  {
+    "godlygeek/tabular",
+    cmd = { "Tabularize" },
+  },
 }

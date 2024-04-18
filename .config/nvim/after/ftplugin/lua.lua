@@ -5,6 +5,8 @@ vim.opt_local.shiftwidth = tabwidth
 vim.opt_local.softtabstop = tabwidth
 vim.opt_local.expandtab = true
 
-for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
-  vim.api.nvim_set_hl(0, group, {})
-end
+-- use gf to open required modules
+-- Options to add `gf` functionality inside `.lua` files.
+vim.opt_local.suffixesadd:prepend('.lua')
+vim.opt_local.suffixesadd:prepend('init.lua')
+vim.opt_local.path:prepend(vim.fn.stdpath('config')..'/lua')

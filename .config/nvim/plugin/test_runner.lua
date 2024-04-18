@@ -1,152 +1,213 @@
-local test_function_query_string = [[
-(
- (function_declaration
-  name: (identifier) @name
-  parameters:
-    (parameter_list
-     (parameter_declaration
-      name: (identifier)
-      type: (pointer_type
-          (qualified_type
-           package: (package_identifier) @_package_name
-           name: (type_identifier) @_type_name)))))
+-- New approach testing with Ginkgo
 
- (#eq? @_package_name "testing")
- (#eq? @_type_name "T")
- (#eq? @name "%s")
-)
-]]
+---@class Test
+---@field name string
+---@field line number
+---@field output string[]
+---@field success boolean
 
-local find_test_line = function(go_bufnr, name)
-	local formatted = string.format(test_function_query_string, name)
-	local query = vim.treesitter.parse_query("go", formatted)
-	local parser = vim.treesitter.get_parser(go_bufnr, "go", {})
-	local tree = parser:parse()[1]
-	local root = tree:root()
-
-	for id, node in query:iter_captures(root, go_bufnr, 0, -1) do
-		if id == 1 then
-			local range = { node:range() }
-			return range[1]
-		end
-	end
-end
-
-local make_key = function(entry)
-	assert(entry.Package, "Must have Package:" .. vim.inspect(entry))
-	assert(entry.Test, "Must have Test:" .. vim.inspect(entry))
-	return string.format("%s/%s", entry.Package, entry.Test)
-end
-
-local add_golang_test = function(state, entry)
-	state.tests[make_key(entry)] = {
-		name = entry.Test,
-		line = find_test_line(state.bufnr, entry.Test),
-		output = {},
-	}
-end
-
-local add_golang_output = function(state, entry)
-	assert(state.tests, vim.inspect(state))
-	table.insert(state.tests[make_key(entry)].output, vim.trim(entry.Output))
-end
-
-local mark_success = function(state, entry)
-	state.tests[make_key(entry)].success = entry.Action == "pass"
-end
-
--- local display_golang_output = function(state, bufnr) end
+---@class Spec
+---@field name string
+---@field line number
+---@field file string
 
 local ns = vim.api.nvim_create_namespace("live-tests")
-local group = vim.api.nvim_create_augroup("teej-automagic", { clear = true })
 
-local attach_to_buffer = function(bufnr, command)
-	local state = {
-		bufnr = bufnr,
-		tests = {},
-	}
+local ginkgo_spec_query = [[
+  (call_expression
+    (identifier) @It (#eq? @It "It")
+    (argument_list
+      (interpreted_string_literal) @specName
+    )
+  ) @spec
+]]
 
-	vim.api.nvim_buf_create_user_command(bufnr, "GoTestLineDiag", function()
-		local line = vim.fn.line(".") - 1
-		for _, test in pairs(state.tests) do
-			if test.line == line then
-				vim.cmd.new()
-				vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), 0, -1, false, test.output)
-			end
-		end
-	end, {})
+---Parses the output of a single focused ginkgo test
+---@param spec Spec
+---@param data string[]
+---@return Test
+local parse_ginkgo_single_test_output = function(spec, data)
+  local test = {}
 
-	vim.api.nvim_create_autocmd("BufWritePost", {
-		group = group,
-		pattern = "*.go",
-		callback = function()
-			vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+  local has_failed = false
+  local end_of_output = false
+  for _, line in ipairs(data) do
+    if line ~= "" then
+      local decoded = vim.json.decode(line)
+      -- print("=================================================================")
+      -- print(decoded.Output)
+      if decoded.Action == "run" or decoded.Action == "start" then
+        -- print("Action:", decoded.Action)
+        test = {
+          name = spec.name,
+          line = spec.line,
+          output = {},
+          success = false,
+        }
+      elseif decoded.Action == "pass" then
+        test.success = true
+      elseif decoded.Action == "fail" then
+        test.success = false
+      elseif decoded.Action == "output" then
+        -- if output contains `[FAILED]`, start appending to the output
+        if string.find(decoded.Output, "%[FAILED%]") then
+          has_failed = true
+        end
+        if has_failed and string.find(decoded.Output, "SSSSSSSSSSSS") then
+          end_of_output = true
+        end
+        if has_failed and not end_of_output then
+          table.insert(test.output, vim.trim(decoded.Output))
+        end
+      end
+    end
+  end
 
-			state = {
-				bufnr = bufnr,
-				tests = {},
-			}
-
-			vim.fn.jobstart(command, {
-				stdout_buffered = true,
-				on_stdout = function(_, data)
-					if not data then
-						return
-					end
-
-					for _, line in ipairs(data) do
-						local decoded = vim.json.decode(line)
-						if decoded.Action == "run" then
-							add_golang_test(state, decoded)
-						elseif decoded.Action == "output" then
-							if not decoded.Test then
-								return
-							end
-
-							add_golang_output(state, decoded)
-						elseif decoded.Action == "pass" or decoded.Action == "fail" then
-							mark_success(state, decoded)
-
-							local test = state.tests[make_key(decoded)]
-							if test.success and test.line then
-								local text = { "✓" }
-								vim.api.nvim_buf_set_extmark(0, ns, test.line, 0, {
-									virt_text = { text },
-								})
-							end
-						elseif decoded.Action == "pause" or decoded.Action == "cont" then
-							-- Do nothing
-						else
-							error("Failed to handle" .. vim.inspect(data))
-						end
-					end
-				end,
-
-				on_exit = function()
-					local failed = {}
-					for _, test in pairs(state.tests) do
-						if test.line then
-							if not test.success then
-								table.insert(failed, {
-									bufnr = bufnr,
-									lnum = test.line,
-									col = 0,
-									severity = vim.diagnostic.severity.ERROR,
-									source = "go-test",
-									message = table.concat(test.output, "\n"),
-									user_data = {},
-								})
-							end
-						end
-					end
-
-					vim.diagnostic.set(ns, bufnr, failed, {})
-				end,
-			})
-		end,
-	})
+  return test
 end
 
-vim.api.nvim_create_user_command("GoTestOnSave", function()
-	attach_to_buffer(vim.api.nvim_get_current_buf(), { "go", "test", "./...", "-v", "-json" })
-end, {})
+---on_exit is called when the go test process exits. It parses the output and
+---displays the results in the current buffer as virtual text
+---@param bufnr number
+---@param tests table<Test>
+local on_exit = function(bufnr, tests)
+  local failed = {}
+  for _, test in pairs(tests) do
+    if test.line then
+      if not test.success then
+        table.insert(failed, {
+          bufnr = bufnr,
+          lnum = test.line,
+          col = 0,
+          severity = vim.diagnostic.severity.ERROR,
+          source = "gingkgo-test",
+          message = table.concat(test.output, "\n"),
+          user_data = {},
+        })
+      else
+        local text = { "✓" }
+        vim.api.nvim_buf_set_extmark(0, ns, test.line, 0, {
+          virt_text = { text },
+        })
+      end
+    end
+  end
+
+  -- TODO: parse the file and line that failed and underline the faulty line
+  vim.diagnostic.set(ns, bufnr, failed, {})
+end
+
+-- test spec runs `go test ./test/ -ginkgo.focus <spec_name>` and parses the output
+-- to display the results in the current buffer as virtual text
+---@param spec Spec
+local test_spec = function(spec)
+  local command = {
+    "go",
+    "test",
+    "./tests/",
+    "-v",
+    "-json",
+    "-ginkgo.no-color",
+    "-ginkgo.focus", spec.name,
+    "-ginkgo.focus-file", spec.file,
+  }
+  local bufnr = vim.api.nvim_get_current_buf()
+  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+
+  ---@type table<Test>
+  local tests = {}
+
+  vim.fn.jobstart(command, {
+    stdout_buffered = true,
+    on_stdout = function(_, data)
+      if not data then
+        return
+      end
+
+      tests[spec.name] = parse_ginkgo_single_test_output(spec, data)
+    end,
+
+    on_exit = function()
+      on_exit(bufnr, tests)
+    end,
+  })
+end
+
+---test_file runs `go test ./test/ -ginkgo.focus-file <file_name>` and parses the output
+---to display the results in the current buffer as virtual text
+---@param filename string
+local test_file = function(filename)
+  local command = {
+    "go",
+    "test",
+    "./tests/",
+    "-v",
+    "-json",
+    "-ginkgo.no-color",
+    "-ginkgo.focus-file", filename,
+  }
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+
+  ---@type table<Test>
+  local tests = {}
+
+  vim.fn.jobstart(command, {
+    stdout_buffered = true,
+    on_stdout = function(_, data)
+      if not data then
+        return
+      end
+
+      tests[spec.name] = parse_ginkgo_single_test_output(spec, data)
+    end,
+
+    on_exit = function()
+      on_exit(bufnr, tests)
+    end,
+  })
+end
+
+-- GinkgoRunSpec runs the spec under the cursor
+vim.api.nvim_create_user_command(
+  "GinkgoRunSpec",
+  function()
+    -- run treesitter query
+    local go_bufnr = vim.api.nvim_get_current_buf()
+    local query = vim.treesitter.query.parse("go", ginkgo_spec_query)
+    local parser = vim.treesitter.get_parser(go_bufnr, "go", {})
+    local root = parser:parse()[1]:root()
+
+    local spec = {}
+    local cursor_line = vim.fn.line(".") - 1
+    local filename = vim.fn.expand("%:p")
+    spec.file = filename
+
+    for id, node in query:iter_captures(root, go_bufnr, 0, -1) do
+      if id == 3 then -- the spect body
+        local spec_name = string.sub(
+          vim.treesitter.get_node_text(
+            node:named_child(1):named_child(0),
+            go_bufnr
+          ),
+          2, -2
+        )
+        local range = { node:range() }
+        if cursor_line >= range[1] and cursor_line <= range[3] then
+          spec.name = spec_name
+          spec.line = range[1]
+          break
+        end
+      end
+    end
+
+
+    if spec ~= nil and spec.line and spec.name then
+      test_spec(spec)
+    else
+      print("not inside a spec")
+    end
+  end,
+  {}
+)

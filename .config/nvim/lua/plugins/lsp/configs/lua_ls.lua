@@ -1,7 +1,4 @@
-local on_attach = require("plugins.lsp.on_attach")
-
 return {
-  on_attach = on_attach,
   settings = {
     Lua = {
       runtime = {
@@ -20,11 +17,19 @@ return {
         }
       },
       completion = {
-        callSnippet = "Replace",
+        callSnippet = "Both",
+        keywordSnippet = "Both",
+        displayContext = 3,
       },
       workspace = {
         library = vim.api.nvim_get_runtime_file("", true),
         checkThirdParty = false,
+      },
+      hint = {
+        enable = true,
+        setType = true,
+        arrayIndex = "Disable",
+        semicolon = "Disable",
       },
     },
   },
