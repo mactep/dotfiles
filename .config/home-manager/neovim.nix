@@ -1,47 +1,47 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   home.sessionVariables = {
     EDITOR = "nvim";
   };
 
-  nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
-    }))
-  ];
   programs.neovim = {
     enable = true;
     package = pkgs.neovim-nightly;
     defaultEditor = true;
     withNodeJs = true;
-    extraPackages = [
+    extraPackages = with pkgs; [
       # for treesitter c compiler
-      pkgs.gcc
-      pkgs.stdenv
-      pkgs.gnumake
+      gcc
+      stdenv
+      gnumake
 
       # extra tools
-      pkgs.ripgrep
-      pkgs.lazygit
-      pkgs.golangci-lint
-      pkgs.silicon
-      pkgs.wl-clipboard
-      pkgs.xclip
+      ripgrep
+      lazygit
+      golangci-lint
+      silicon
+      wl-clipboard
+      xclip
+
+      # for markdown-preview.nvim
+      yarn
+      # (import ./wrapped_pkgs/surf.nix { inherit pkgs; })
+      # TODO: replace it with tauri/pake
 
       # language servers
-      pkgs.lua-language-server
-      pkgs.gopls
-      pkgs.buf-language-server
-      pkgs.efm-langserver
-      pkgs.nodePackages.typescript-language-server
+      lua-language-server
+      gopls
+      buf-language-server
+      efm-langserver
+      nodePackages.typescript-language-server
 
       # efm tools
-      pkgs.revive
-      pkgs.prettierd
-      pkgs.jq
-      pkgs.buf
-      pkgs.shellharden
-      pkgs.nixpkgs-fmt
+      revive
+      prettierd
+      jq
+      buf
+      shellharden
+      nixpkgs-fmt
     ];
   };
 }

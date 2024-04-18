@@ -1,6 +1,7 @@
 { pkgs, lib, user, ... }:
 
 {
+  # TODO: add git as a dependency. Either import or redefine it.
   programs.bash.shellAliases.dotfiles = "git --git-dir=$HOME/.dotfiles --work-tree=$HOME";
   programs.fish.functions.dotfiles = "git --git-dir=$HOME/.dotfiles --work-tree=$HOME $argv";
 

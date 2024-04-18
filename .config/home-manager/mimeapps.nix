@@ -3,7 +3,7 @@ let
   file-manager = "org.gnome.Nautilus.desktop";
   image-viewer = "nsxiv.desktop";
   torrent = "transmission-gtk.desktop";
-  pdf-viewer = "zathura.desktop";
+  pdf-viewer = "org.pwmt.zathura-pdf-mupdf.desktop";
 in {
   xdg.mimeApps = rec {
     enable = true;
@@ -44,6 +44,13 @@ in {
       "image/svg+xml-compressed" = image-viewer;
       "image/vnd.wap.wbmp" = image-viewer;
       "image/x-icns" = image-viewer;
+
+      #telegram
+      "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
+
+      # prusa slicer
+      "x-scheme-handler/prusaslicer" = "PrusaSlicerURLProtocol.desktop";
+      "application/vnd.ms-pki.stl" = ["OrcaSlicer.desktop" "PrusaSlicer.desktop"];
     };
   };
 }

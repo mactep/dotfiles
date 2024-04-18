@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-unstable, ... }:
 
 let
   catppuccin-fish = pkgs.fetchFromGitHub {
@@ -9,7 +9,7 @@ let
   };
 in
 {
-  home.packages = with pkgs; [
+  home.packages = (with pkgs; [
     alacritty
     yazi # terminal file browser
     ueberzugpp # image preview for yazi
@@ -17,9 +17,13 @@ in
     ripgrep # "better" grep
     bat # "better" cat
     lazygit
+  ]) ++ (with pkgs-unstable; [
     (nerdfonts.override { fonts = [ "JetBrainsMono" "Monaspace" ]; })
+  ]);
 
-  ];
+  home.sessionVariables = {
+    TERM = "alacritty";
+  };
 
   programs.fish = {
     enable = true;

@@ -7,16 +7,11 @@
     steam-run
   ];
 
-  home.sessionVariables = { };
-
-  home.file = {
-    ".local/share/applications/steam.desktop".text = ''
-      [Desktop Entry]
-      Name=Steam
-      Exec=steam
-      Icon=steam
-      Type=Application
-      Categories=Game
-    '';
+  xdg.desktopEntries.steam = {
+    name = "Steam";
+    exec = "steam";
+    icon = "steam";
+    type = "Application";
+    categories = [ "Game" ];
   };
 }

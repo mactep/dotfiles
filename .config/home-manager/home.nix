@@ -4,13 +4,14 @@
   imports = [
     # ./hyprland.nix
     ./gnome.nix
-    ./work.nix
+    # ./work.nix
     ./neovim.nix
     ./terminal.nix
     ./steam.nix
     ./dotfiles.nix
     ./mimeapps.nix
     ./dev.nix
+    ./3dprinting.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -53,8 +54,13 @@
     # media
     mpv
     zathura # pdf viewer
-    nsxiv # image viewer
     gimp
+    nsxiv # image viewer
+    (writeShellApplication {
+        name = "nsxiv-rifle";
+        runtimeInputs = [ nsxiv ];
+        text = builtins.readFile ./nsxiv-rifle.sh;
+    })
 
     # chatting
     telegram-desktop
@@ -69,10 +75,15 @@
 
     # gaming
     lutris
-    wineWowPackages.staging
+    wineWowPackages.stagingFull
+    winetricks
 
     # office
     libreoffice
+
+    # testing new apps
+    neovide # neovim gui
+    plex-media-player # plex desktop app
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -102,7 +113,7 @@
   #  /etc/profiles/per-user/${user.name}/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    HISTCONTROL = "ignorespace"; # keep commands that start with a space out of history
   };
 
   # Let Home Manager install and manage itself.
